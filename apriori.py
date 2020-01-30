@@ -32,8 +32,10 @@ def encode(x):
 ##
 ##	Limpando dados
 print('Cleaning data.')
+#strip -> removes \n, \t, etc from strings
 data['Description'] = data['Description'].str.strip()
-data.dropna(axis = 0, subset =['InvoiceNo'], inplace = True) 
+#Drops missing values (nulls, numpu nan)
+print(data.dropna(axis = 0, subset =['InvoiceNo'], inplace = True)) 
 data['InvoiceNo'] = data['InvoiceNo'].astype('str')
 data = data[~data['InvoiceNo'].str.contains('C')] 
 ##
@@ -97,4 +99,9 @@ frq_items = apriori(basket_France, min_support = 0.05, use_colnames = True)
   
 rules = association_rules(frq_items, metric ="lift", min_threshold = 1) 
 rules = rules.sort_values(['confidence', 'lift'], ascending =[False, False]) 
-print(rules.head())
+_antecedents_ = rules.head()['antecedents']
+_consequents_ = rules.head()['consequents']
+_confidence_ = rules.head()['confidence']
+
+for i in _antecedents_:
+	print(i[0])
