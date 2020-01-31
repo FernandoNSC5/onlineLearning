@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
 import sys
 import pandas as pd
@@ -52,10 +53,10 @@ class Data():
 		          .sum().unstack().reset_index().fillna(0) 
 		          .set_index('InvoiceNo')) 
 		  
-		self.uk_balance = (self.data[self.data['Country'] =="United Kingdom"] 
-		          .groupby(['InvoiceNo', 'Description'])['Quantity'] 
-		          .sum().unstack().reset_index().fillna(0) 
-		          .set_index('InvoiceNo')) 
+		#self.uk_balance = (self.data[self.data['Country'] =="United Kingdom"] 
+		#          .groupby(['InvoiceNo', 'Description'])['Quantity'] 
+		#          .sum().unstack().reset_index().fillna(0) 
+		#          .set_index('InvoiceNo')) 
 		  
 		self.portugal_balance = (self.data[self.data['Country'] =="Portugal"] 
 		          .groupby(['InvoiceNo', 'Description'])['Quantity'] 
@@ -71,8 +72,8 @@ class Data():
 		self.encoded_balance = self.france_balance.applymap(self.encode) 
 		self.france_balance = self.encoded_balance 
 		  
-		self.encoded_balance = self.uk_balance.applymap(self.encode) 
-		self.uk_balance = self.encoded_balance 
+		#self.encoded_balance = self.uk_balance.applymap(self.encode) 
+		#self.uk_balance = self.encoded_balance 
 		  
 		self.encoded_balance = self.portugal_balance.applymap(self.encode) 
 		self.portugal_balance = self.encoded_balance 
