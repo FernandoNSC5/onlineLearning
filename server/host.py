@@ -53,4 +53,78 @@ class Host():
 			soc.close()
 			print('closed')
 
+	#########################################################################
+	##	METHODS	
+	def add_customer_data(self, invoice, stock_code, description, quantity, unit_price, customer_id, country):
+		_PROCESS_.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
+
+	def apriori_french(self, data):
+		### Data must be in format list() with sequence of products selected 
+		french = d.get_french_model()
+		french_antecedents = french['antecedents']
+		french_consequents = french['consequents']
+
+		n_consequents = list()
+		n_antecedents = list()
+
+		for i in french_consequents:
+			n_consequents.append(list(i))
+		french_consequents = n_consequents
+
+		for i in french_antecedents:
+			n_antecedents.append(list(i))
+		french_antecedents = n_antecedents
+
+		for i in range(len(n_antecedents)):
+			if data == n_antecedents[i]:
+				return n_consequents[i]
+
+		return None
+
+	def apriori_portugal(self, data):
+		### Data must be in format list() with sequence of products selected 
+		portugal = d.get_portugease_model()
+		portugal_antecedents = portugal['antecedents']
+		portugal_consequents = portugal['consequents']
+
+		n_consequents = list()
+		n_antecedents = list()
+
+		for i in portugal_consequents:
+			n_consequents.append(list(i))
+		portugal_consequents = n_consequents
+
+		for i in portugal_antecedents:
+			n_antecedents.append(list(i))
+		portugal_antecedents = n_antecedents
+
+		for i in range(len(n_antecedents)):
+			if data == n_antecedents[i]:
+				return n_consequents[i]
+
+		return None
+
+	def apriori_sweden(self, data):
+		### Data must be in format list() with sequence of products selected 
+		sweden = d.get_sweeden_model()
+		sweden_antecedents = sweden['antecedents']
+		sweden_consequents = sweden['consequents']
+
+		n_consequents = list()
+		n_antecedents = list()
+
+		for i in sweden_consequents:
+			n_consequents.append(list(i))
+		sweden_consequents = n_consequents
+
+		for i in sweden_antecedents:
+			n_antecedents.append(list(i))
+		sweden_antecedents = n_antecedents
+
+		for i in range(len(n_antecedents)):
+			if data == n_antecedents[i]:
+				return n_consequents[i]
+
+		return None
+
 s = Host()
