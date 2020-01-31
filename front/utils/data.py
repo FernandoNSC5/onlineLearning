@@ -19,10 +19,9 @@ class Data():
 		self._HEIGHT_ = 600
 
 		############################
-		## Hardcoded products by country
-		self._PRODUCTS_FRANCE_ = list()
-		self._PRODUCTS_PORTUGAL_ = list()
-		self._PRODUCTS_SWEDEN_ = list()
+		## Hardcoded products
+		self._COUNTRYS_ = ['France', 'Portugal', 'Sweden']
+		self._PRODUCTS_ = list()
 
 	##################################################
 	##	Getters
@@ -59,11 +58,8 @@ class Data():
 		return self._HEIGHT_
 
 	#products list
-	def get_france_list(self):
-		return self._PRODUCTS_FRANCE_
+	def get_countrys(self):
+		return _COUNTRYS_
 
-	def get_portugal_list(self):
-		return self._PRODUCTS_PORTUGAL_
-
-	def get_sweden_list(self):
-		return self._PRODUCTS_SWEDEN_
+	def get_products(self):
+		return _PRODUCTS_
