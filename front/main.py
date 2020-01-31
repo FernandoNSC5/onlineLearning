@@ -43,6 +43,9 @@ class App(QMainWindow):
 		self.setWindowTitle(self.title)
 		self.setGeometry(self.LEFT, self.TOP, self.WIDTH, self.HEIGHT)
 
+		#Draw product btn
+		self.drawProductButton()
+
 		self.show()
 
 	#####################################################
@@ -58,6 +61,26 @@ class App(QMainWindow):
 		pen.setCapStyle(QtCore.Qt.RoundCap)
 		pen.setJoinStyle(QtCore.Qt.RoundJoin)
 		painter.setPen(pen)
+
+	def drawProductButton(self):
+		self.ProductBtn = QPushButton('Um produto qualquer', self)
+		self.ProductBtn.setVisible(True)
+		self.ProductBtn.resize(490,120)
+		self.ProductBtn.move(157,345)
+		self.ProductBtn.setStyleSheet("QPushButton {background-color: #CAB8B2}"
+				"QPushButton {color: white}"
+				"QPushButton {border-radius: 12px}"
+				"QPushButton {font-family: Calibri}"
+				"QPushButton {font-size: 20px}"
+				"QPushButton:hover {background-color: #a3867c}"
+				"QPushButton:hover:!pressed {background-color: #6e5f5a}")
+		self.ProductBtn.clicked.connect(self.productAppAction)
+
+	######################################################
+	##	Python slots
+	@pyqtSlot()
+	def productAppAction(self):
+		print("clicado")
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
