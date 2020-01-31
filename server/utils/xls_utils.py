@@ -24,16 +24,18 @@ class xls_utils:
 
 	def write_xls(self):
 		print("[WRITING] Loading original data")
-		wb = load_workbook("Online_retail.xlsx")
+		wb = load_workbook("../Online_retail.xlsx")
 		ws = wb.worksheets[0]
 		print("[WRITING] Appending new data")
 		for row_data in self.input_data:
 		    ws.append(row_data)
 		print("[WRITING] Saving data")
-		wb.save("Online_retail.xlsx")
+		wb.save("../Online_retail.xlsx")
 		print("[WRITING] Data stored")
 		self.flush_memory()
 
 	def get_data(self):
 		return date.today()
 
+x = xls_utils()
+x.add_to_input(999999, 'isso é um teste', '9999999', 'Brazil')
