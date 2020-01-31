@@ -3,3 +3,4 @@ numpy
 mlxtend
 xlrd
 openpyxls
+pyqt5
