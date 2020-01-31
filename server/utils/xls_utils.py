@@ -6,15 +6,14 @@ class xls_utils:
 	def __init__(self):
 		self.input_data = list()
 
-	def add_to_input(self, invoice, description, customerID, country):
-		#InvoiceNo	StockCode	Description	Quantity	InvoiceDate	UnitPrice	CustomerID	Country
+	def add_to_input(self, invoice, stock_code, description, quantity, unit_price, customerID, country):
 		data = list()
 		data.append(invoice)
-		data.append('123123')
+		data.append(stock_code)
 		data.append(description)
-		data.append(1)
+		data.append(quantity)
 		data.append(str(self.get_data()))
-		data.append(3.10)
+		data.append(unit_price)
 		data.append(customerID)
 		data.append(country)
 		self.input_data.append(data)
@@ -36,6 +35,3 @@ class xls_utils:
 
 	def get_data(self):
 		return date.today()
-
-x = xls_utils()
-x.add_to_input(999999, 'isso é um teste', '9999999', 'Brazil')
