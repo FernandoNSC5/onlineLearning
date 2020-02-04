@@ -386,7 +386,7 @@ class Data():
 							'T-LIGHT HOLDER HANGING LOVE BIRD', 'FOLDING UMBRELLA BLACKBLUE POLKADOT', 'ANTIQUE ALL GLASS CANDLESTICK', 'MAGNETS PACK OF 4 VINTAGE LABELS ', 'MIRRORED WALL ART POPPIES', 
 							'WRAP DOLLY GIRL', 'SMALL SILVER TRELLIS CANDLEPOT', 'KNITTED UNION FLAG HOT WATER BOTTLE', 'SET 6 FOOTBALL CELEBRATION CANDLES', 'WHITE WICKER STAR' ]
 	
-	def get_sorted_product(self):
+	def get_randomized_product(self):
 		return self._PRODUCTS_[random.randint(0, len(self._PRODUCTS_))]
 
 	##################################################
@@ -429,7 +429,3 @@ class Data():
 
 	def get_products(self):
 		return self._PRODUCTS_
-
-d = Data()
-for i in range(3):
-	print(d.get_sorted_product())
