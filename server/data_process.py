@@ -6,6 +6,7 @@ import pandas as pd
 from mlxtend.frequent_patterns import apriori, association_rules
 sys.path.append('utils/')
 import xls_utils as utils
+import threading
 
 class Data():
 
@@ -41,6 +42,9 @@ class Data():
 		_UTILS.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
 
 	def update_data(self):
+		thr = threading.Thread(target=self.update_data_slave, args=(), kwargs={})
+
+	def update_data_slave(self):
 		print('[UPDATING DATA]\tWriting buffer to database')
 		_UTILS.write_xls()
 		print('[UPDATED]\tLoading new database')
