@@ -37,6 +37,42 @@ class Host():
 					#######################################
 					## PROCESS DATA RECIVED HERE
 					print('[SERVER] Processing data.. ', end=' ')
+					#French processing data
+					if(rcData[6] == "France"):
+						try:
+							response = self.apriori_french(rcData)
+							conn.send(response.encode())
+						except Exception as e:
+							print("[ERROR] " + str(e))
+							conn.send(e.encode())
+
+					#Portugal processing data
+					if(rcData[6] == "Portugal"):
+						try:
+							response = self.apriori_portugal(rdData)
+							conn.send(e.encode())
+						except Exception as e:
+							print("[ERROR] " + str(e))
+							conn.send(e.encode())
+
+					#Sweden processing data
+					if(rcData[6] == "Sweden"):
+						try:
+							response = self.apriori_sweden(rcData)
+							conn.send(e.encode())
+						except Exception as e:
+							print("[ERROR] " + str(e))
+							conn.send(e.encode())
+
+					else:
+						#Error flag
+						conn.send("".encode())
+						continue
+
+					# XLS Data atualization
+					if _TIMES_LISTENED % 50 == 0:
+						_PROCESS_.update_data()
+
 					response = self._PROCESS_.process(rcData)
 					print('finished')
 
