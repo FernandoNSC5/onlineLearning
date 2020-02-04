@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QApplication, QMessageBox,
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QFont, QPen, QIntValidator
 
 sys.path.append('utils/')
-import soc_front_use as _SOCKET
+import soc_front_use
 import data
 
 class App(QMainWindow):
@@ -27,8 +27,10 @@ class App(QMainWindow):
 		self.TOP = _DATA_.get_top()
 		self.WIDTH = _DATA_.get_width()
 		self.HEIGHT = _DATA_.get_height()
-
 		self.LOCATIONS = _DATA_.get_countrys()
+
+		#Sockets usage
+		_SOCKET_ = soc_front_use
 
 		#Destroying Windows Flags
 		self.setWindowFlags(
@@ -83,6 +85,26 @@ class App(QMainWindow):
 	@pyqtSlot()
 	def productAppAction(self):
 		
+		#########################
+		##	DATA ORDER
+		##	-invoice
+		##	-stock_code
+		##	-description
+		##	-quantity
+		##	-unit_price
+		##	-customer_id
+		##	-country
+
+		country = LOCATIONS[0]
+		invoice = 1234
+		stock_code = 1234
+		desc = "teste"
+		quantity = 1
+		unit_price = 1.8
+		customer_id = 59999
+
+		_RESPONSE_ = _SOCKET_.send_data([invoice, stock_code, desc, quantity, unit_price, customer_id, country])
+		return _RESPONSE_
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
