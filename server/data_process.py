@@ -43,6 +43,7 @@ class Data():
 
 	def update_data(self):
 		thr = threading.Thread(target=self.update_data_slave, args=(), kwargs={})
+		thr.start()
 
 	def update_data_slave(self):
 		print('[UPDATING DATA]\tWriting buffer to database')
