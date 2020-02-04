@@ -423,6 +423,3 @@ class Data():
 
 	def get_products(self):
 		return self._PRODUCTS_
-
-d = Data()
-print(d.get_products())
