@@ -26,8 +26,12 @@ class xls_utils:
 		wb = load_workbook("../Online_retail.xlsx")
 		ws = wb.worksheets[0]
 		print("[WRITING] Appending new data")
+
+		#Appending data
 		for row_data in self.input_data:
 		    ws.append(row_data)
+		
+		#Saving data
 		print("[WRITING] Saving data")
 		wb.save("../Online_retail.xlsx")
 		print("[WRITING] Data stored")
