@@ -59,6 +59,9 @@ class Data():
 		print('[RESEGMENTED]\tEncoding')
 		self.encoding()
 		print('[REENCODED]\tCreating models')
+		self.gen_new_models()
+
+	def gen_new_models(self):
 		self.french_models = self.create_french_models()
 		self.portugease_models = self.create_portugease_models()
 		self.sweedish_models = self.create_sweedish_moels()
