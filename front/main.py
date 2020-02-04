@@ -28,6 +28,8 @@ class App(QMainWindow):
 		self.WIDTH = _DATA_.get_width()
 		self.HEIGHT = _DATA_.get_height()
 
+		self.LOCATIONS = _DATA_.get_countrys()
+
 		#Destroying Windows Flags
 		self.setWindowFlags(
 						QtCore.Qt.Window |
@@ -80,7 +82,7 @@ class App(QMainWindow):
 	##	Python slots
 	@pyqtSlot()
 	def productAppAction(self):
-		print("clicado")
+		
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
