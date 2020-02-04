@@ -1,3 +1,5 @@
+import random
+
 class Data():
 
 	def __init__(self):
@@ -383,6 +385,10 @@ class Data():
 							'BROWN KUKUI COCONUT SEED NECKLACE', 'FIRST CLASS PASSPORT COVER ', 'CERAMIC CAKE DESIGN SPOTTED MUG', 'SET OF 4 PANTRY JELLY MOULDS', '3D DOG PICTURE PLAYING CARDS', 
 							'T-LIGHT HOLDER HANGING LOVE BIRD', 'FOLDING UMBRELLA BLACKBLUE POLKADOT', 'ANTIQUE ALL GLASS CANDLESTICK', 'MAGNETS PACK OF 4 VINTAGE LABELS ', 'MIRRORED WALL ART POPPIES', 
 							'WRAP DOLLY GIRL', 'SMALL SILVER TRELLIS CANDLEPOT', 'KNITTED UNION FLAG HOT WATER BOTTLE', 'SET 6 FOOTBALL CELEBRATION CANDLES', 'WHITE WICKER STAR' ]
+	
+	def get_sorted_product(self):
+		return self._PRODUCTS_[random.randint(0, len(self._PRODUCTS_))]
+
 	##################################################
 	##	Getters
 	#web
@@ -423,3 +429,7 @@ class Data():
 
 	def get_products(self):
 		return self._PRODUCTS_
+
+d = Data()
+for i in range(3):
+	print(d.get_sorted_product())
