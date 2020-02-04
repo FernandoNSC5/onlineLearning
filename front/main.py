@@ -20,14 +20,14 @@ class App(QMainWindow):
 
 		#################################################
 		##	STATIC VAR
-		_DATA_ = data.Data()
-		self.pixmap = QPixmap(_DATA_.get_pixmap())
-		self.title = _DATA_.get_title()
-		self.LEFT = _DATA_.get_left()
-		self.TOP = _DATA_.get_top()
-		self.WIDTH = _DATA_.get_width()
-		self.HEIGHT = _DATA_.get_height()
-		self.LOCATIONS = _DATA_.get_countrys()
+		self._DATA_ = data.Data()
+		self.pixmap = QPixmap(self._DATA_.get_pixmap())
+		self.title = self._DATA_.get_title()
+		self.LEFT = self._DATA_.get_left()
+		self.TOP = self._DATA_.get_top()
+		self.WIDTH = self._DATA_.get_width()
+		self.HEIGHT = self._DATA_.get_height()
+		self.LOCATIONS = self._DATA_.get_countrys()
 
 		#Sockets usage
 		_SOCKET_ = soc_front_use
@@ -67,7 +67,8 @@ class App(QMainWindow):
 		painter.setPen(pen)
 
 	def drawProductButton(self):
-		self.ProductBtn = QPushButton('Um produto qualquer', self)
+		self.description = self._DATA_.get_randomized_product()
+		self.ProductBtn = QPushButton(self.description, self)
 		self.ProductBtn.setVisible(True)
 		self.ProductBtn.resize(490,120)
 		self.ProductBtn.move(157,345)
@@ -98,7 +99,7 @@ class App(QMainWindow):
 		country = LOCATIONS[0]
 		invoice = 1234
 		stock_code = 1234
-		desc = "teste"
+		desc = self.description
 		quantity = 1
 		unit_price = 1.8
 		customer_id = 59999
