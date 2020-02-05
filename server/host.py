@@ -94,11 +94,16 @@ class Host():
 	def add_customer_data(self, invoice, stock_code, description, quantity, unit_price, customer_id, country):
 		_PROCESS_.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
 
+
+
 	def apriori_french(self, data):
 		### Data must be in format list() with sequence of products selected 
 		french = d.get_french_model()
 		french_antecedents = french['antecedents']
 		french_consequents = french['consequents']
+
+		#Adding to write queue
+		self.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
 
 		n_consequents = list()
 		n_antecedents = list()
@@ -123,6 +128,9 @@ class Host():
 		portugal_antecedents = portugal['antecedents']
 		portugal_consequents = portugal['consequents']
 
+		#Adding to write queue
+		self.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+
 		n_consequents = list()
 		n_antecedents = list()
 
@@ -145,6 +153,9 @@ class Host():
 		sweden = d.get_sweeden_model()
 		sweden_antecedents = sweden['antecedents']
 		sweden_consequents = sweden['consequents']
+
+		#Adding to write queue
+		self.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
 
 		n_consequents = list()
 		n_antecedents = list()
