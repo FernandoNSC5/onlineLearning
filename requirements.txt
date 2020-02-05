@@ -2,5 +2,5 @@ pandas
 numpy
 mlxtend
 xlrd
-openpyxls
+openpyxl
 pyqt5
