@@ -4,3 +4,4 @@ mlxtend
 xlrd
 openpyxl
 pyqt5
+mlxtend
