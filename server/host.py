@@ -13,7 +13,7 @@ class Host():
 		self._HOST = ""
 		self._LISTEN_TIMES = 100
 
-		print("[INITIALIZED] Calling DATA MODULE\t")
+		print("[INITIALIZED]\t Calling DATA MODULE\t")
 		self._PROCESS_ = DATA_MODULE.Data()
 		self.init_server()
 
@@ -22,30 +22,30 @@ class Host():
 		try:
 			err_flag = False
 			_TIMES_LISTENED = 0
-			soc = socket.socket(socket.AF_INET, socket.AF_INET, socket.SOCK_STREAM)
+			soc = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
 			soc.bind((self._HOST, self._PORT))
 			print('Initialized')
 			soc.listen(self._LISTEN_TIMES)
 			while True:
 				_TIMES_LISTENED += 1
-				print('[SERVER] Listenning PORT ' + str(self._PORT))
+				print('[SERVER]\t Listenning PORT ' + str(self._PORT))
 				conn, addr = soc.accept()
-				print('[SERVER] Request nº ' + str(_TIMES_LISTENED))
-				print('[SERVER] Request from ' + str(addr))
+				print('[SERVER]\t Request nº ' + str(_TIMES_LISTENED))
+				print('[SERVER]\t Request from ' + str(addr))
 
 				while True:
 					rcData = conn.recv(self._BUFFER_LENGTH).decode()
 
 					#######################################
 					## PROCESS DATA RECIVED HERE
-					print('[SERVER] Processing data.. ')
+					print('[SERVER]\t Processing data.. ')
 					#French processing data
 					if(rcData[6] == "France"):
 						try:
 							response = self.apriori_french(rcData)
 							conn.send(response.encode())
 						except Exception as e:
-							print("[ERROR] " + str(e))
+							print("[ERROR]\t" + str(e))
 							conn.send(e.encode())
 
 					#Portugal processing data
@@ -54,7 +54,7 @@ class Host():
 							response = self.apriori_portugal(rdData)
 							conn.send(e.encode())
 						except Exception as e:
-							print("[ERROR] " + str(e))
+							print("[ERROR]\t " + str(e))
 							conn.send(e.encode())
 
 					#Sweden processing data
@@ -63,7 +63,7 @@ class Host():
 							response = self.apriori_sweden(rcData)
 							conn.send(e.encode())
 						except Exception as e:
-							print("[ERROR] " + str(e))
+							print("[ERROR]\t " + str(e))
 							conn.send(e.encode())
 
 					else:
@@ -76,19 +76,19 @@ class Host():
 						_PROCESS_.update_data()
 
 					response = self._PROCESS_.process(rcData)
-					print('finished')
+					print('[FINISHED]')
 
 					#######################################
 					##	DATA RESPONSE
-					print('[SERVER] Sending response ')
+					print('[SERVER]\t Sending response ')
 					conn.send(response.encode())
-					print('data sent')
+					print('[SENT]')
 
 		except Exception as e:
 			print(str(e))
 			err_flag = True
 		finally:
-			print('[SERVER] Closing connection.. ')
+			print('[SERVER]\t Closing connection.. ')
 			if not err_flag:
 				soc.close()
 			print('closed')
@@ -101,6 +101,7 @@ class Host():
 
 
 	def apriori_french(self, data):
+		print("[RUNNING]\t Apriori FRENCH MODEL")
 		### Data must be in format list() with sequence of products selected 
 		french = d.get_french_model()
 		french_antecedents = french['antecedents']
@@ -127,6 +128,7 @@ class Host():
 		return None
 
 	def apriori_portugal(self, data):
+		print("[RUNNING]\t Apriori PORTUGAL MODEL")
 		### Data must be in format list() with sequence of products selected 
 		portugal = d.get_portugease_model()
 		portugal_antecedents = portugal['antecedents']
@@ -153,6 +155,7 @@ class Host():
 		return None
 
 	def apriori_sweden(self, data):
+		print("[RUNNING]\t Apriori SWEDEN MODEL")
 		### Data must be in format list() with sequence of products selected 
 		sweden = d.get_sweeden_model()
 		sweden_antecedents = sweden['antecedents']
