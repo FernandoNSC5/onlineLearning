@@ -72,8 +72,8 @@ class Host():
 						continue
 
 					# XLS Data atualization
-					if _TIMES_LISTENED % 50 == 0:
-						_PROCESS_.update_data()
+					#if _TIMES_LISTENED % 50 == 0:
+					_PROCESS_.update_data()
 
 					response = self._PROCESS_.process(rcData)
 					print('finished')
