@@ -32,6 +32,9 @@ class App(QMainWindow):
 		#Sockets usage
 		_SOCKET_ = soc_front_use
 
+		#Screen button info
+		self.description = self._DATA_.get_randomized_product()
+
 		#Destroying Windows Flags
 		self.setWindowFlags(
 						QtCore.Qt.Window |
@@ -67,7 +70,6 @@ class App(QMainWindow):
 		painter.setPen(pen)
 
 	def drawProductButton(self):
-		self.description = self._DATA_.get_randomized_product()
 		self.ProductBtn = QPushButton(self.description, self)
 		self.ProductBtn.setVisible(True)
 		self.ProductBtn.resize(490,120)
@@ -105,6 +107,14 @@ class App(QMainWindow):
 		customer_id = 59999
 
 		_RESPONSE_ = _SOCKET_.send_data([invoice, stock_code, desc, quantity, unit_price, customer_id, country])
+
+		if "[ERROR]" in _RESPONSE_:
+			print("An error ocurred on back-end")
+			return
+
+		#New product - Apriori based
+		self.description = _RESPONSE_[0]
+
 		return _RESPONSE_
 
 if __name__ == '__main__':
