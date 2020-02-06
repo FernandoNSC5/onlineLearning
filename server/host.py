@@ -7,18 +7,20 @@ import data_process as DATA_MODULE
 class Host():
 
 	def __init__(self):
+		print("[STARTED]\t Initializing core variables")
 		self._PORT = 3000
 		self._BUFFER_LENGTH = 128
 		self._HOST = ""
 		self._LISTEN_TIMES = 100
 
-		self._PROCESS_ = DATA_MODULE.initialize()
+		print("[INITIALIZED] Calling DATA MODULE\t")
+		self._PROCESS_ = DATA_MODULE.Data()
 		self.init_server()
 
 	def init_server(self):
-		print('[INFO] Initializing Server', end=' ')
 
 		try:
+			err_flag = False
 			_TIMES_LISTENED = 0
 			soc = socket.socket(socket.AF_INET, socket.AF_INET, socket.SOCK_STREAM)
 			soc.bind((self._HOST, self._PORT))
@@ -36,7 +38,7 @@ class Host():
 
 					#######################################
 					## PROCESS DATA RECIVED HERE
-					print('[SERVER] Processing data.. ', end=' ')
+					print('[SERVER] Processing data.. ')
 					#French processing data
 					if(rcData[6] == "France"):
 						try:
@@ -78,15 +80,17 @@ class Host():
 
 					#######################################
 					##	DATA RESPONSE
-					print('[SERVER] Sending response ', end='')
+					print('[SERVER] Sending response ')
 					conn.send(response.encode())
 					print('data sent')
 
 		except Exception as e:
-			print('[SERVER] ERROR ' + str(e))
+			print(str(e))
+			err_flag = True
 		finally:
-			print('[SERVER] Closing connection.. ', end='')
-			soc.close()
+			print('[SERVER] Closing connection.. ')
+			if not err_flag:
+				soc.close()
 			print('closed')
 
 	#########################################################################
