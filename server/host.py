@@ -34,22 +34,29 @@ class Host():
 				print('[SERVER]\t Request from ' + str(addr))
 
 				while True:
-					rcData = conn.recv(self._BUFFER_LENGTH).decode()
+					rc_Data = conn.recv(self._BUFFER_LENGTH).decode()
+					print("Recived: " + str(rc_Data))
+					rcData = rc_Data.split('#')
+					print("Processed: " + str(rcData))
 
 					#######################################
 					## PROCESS DATA RECIVED HERE
 					print('[SERVER]\t Processing data.. ')
 					#French processing data
-					if(rcData[6] == "France"):
+					if(rcData[6] == 'France'):
+						print("into france")
 						try:
 							response = self.apriori_french(rcData)
+							print("response recived")
+							print("Response: " + str(response))
 							conn.send(response.encode())
 						except Exception as e:
 							print("[ERROR]\t" + str(e))
 							conn.send(e.encode())
 
 					#Portugal processing data
-					if(rcData[6] == "Portugal"):
+					if(rcData[6] == 'Portugal'):
+						print("into portugal")
 						try:
 							response = self.apriori_portugal(rdData)
 							conn.send(e.encode())
@@ -58,7 +65,8 @@ class Host():
 							conn.send(e.encode())
 
 					#Sweden processing data
-					if(rcData[6] == "Sweden"):
+					if(rcData[6] == 'Sweden'):
+						print("into sweden")
 						try:
 							response = self.apriori_sweden(rcData)
 							conn.send(e.encode())
@@ -68,14 +76,16 @@ class Host():
 
 					else:
 						#Error flag
+						print("[ERROR] Returning NULL")
+						err_flag = True
 						conn.send("".encode())
 						continue
 
 					# XLS Data atualization
-					if _TIMES_LISTENED % 50 == 0:
-						_PROCESS_.update_data()
+					#if _TIMES_LISTENED % 50 == 0:
+					_PROCESS_.update_data()
 
-					response = self._PROCESS_.process(rcData)
+					#response = self._PROCESS_.process(rcData)
 					print('[FINISHED]')
 
 					#######################################
@@ -96,14 +106,14 @@ class Host():
 	#########################################################################
 	##	METHODS	
 	def add_customer_data(self, invoice, stock_code, description, quantity, unit_price, customer_id, country):
-		_PROCESS_.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
+		self._PROCESS_.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
 
 
 
 	def apriori_french(self, data):
 		print("[RUNNING]\t Apriori FRENCH MODEL")
-		### Data must be in format list() with sequence of products selected 
-		french = d.get_french_model()
+		### Data must be in format list() with sequence of products selected
+		french = self._PROCESS_.get_french_model()
 		french_antecedents = french['antecedents']
 		french_consequents = french['consequents']
 
@@ -117,11 +127,14 @@ class Host():
 			n_consequents.append(list(i))
 		french_consequents = n_consequents
 
+
 		for i in french_antecedents:
 			n_antecedents.append(list(i))
 		french_antecedents = n_antecedents
 
+		print("\n\nRUNNING SEARCH")
 		for i in range(len(n_antecedents)):
+			print(str(n_antecedents[i]))
 			if data == n_antecedents[i]:
 				return n_consequents[i]
 
@@ -130,7 +143,7 @@ class Host():
 	def apriori_portugal(self, data):
 		print("[RUNNING]\t Apriori PORTUGAL MODEL")
 		### Data must be in format list() with sequence of products selected 
-		portugal = d.get_portugease_model()
+		portugal = self._PROCESS_.get_portugease_model()
 		portugal_antecedents = portugal['antecedents']
 		portugal_consequents = portugal['consequents']
 
@@ -157,7 +170,7 @@ class Host():
 	def apriori_sweden(self, data):
 		print("[RUNNING]\t Apriori SWEDEN MODEL")
 		### Data must be in format list() with sequence of products selected 
-		sweden = d.get_sweeden_model()
+		sweden = self._PROCESS_.get_sweeden_model()
 		sweden_antecedents = sweden['antecedents']
 		sweden_consequents = sweden['consequents']
 

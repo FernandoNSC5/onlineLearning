@@ -13,7 +13,7 @@ class Data():
 	def __init__(self):
 		#####################################################
 		##	UTILS
-		_UTILS = utils.xls_utils()
+		self._UTILS = utils.xls_utils()
 
 		######################################################
 		##	A.I PROCESS
@@ -39,7 +39,7 @@ class Data():
 		print('[MODELS READY]\n')
 
 	def add_customer_data(self, invoice, stock_code, description, quantity, unit_price, customer_id, country):
-		_UTILS.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
+		self._UTILS.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
 
 	def update_data(self):
 		thr = threading.Thread(target=self.update_data_slave, args=(), kwargs={})
@@ -47,7 +47,7 @@ class Data():
 
 	def update_data_slave(self):
 		print('[UPDATING DATA]\tWriting buffer to database')
-		_UTILS.write_xls()
+		self._UTILS.write_xls()
 		print('[UPDATED]\tLoading new database')
 		self.data = pd.read_excel('Online_retail.xlsx') 
 		self.data.head() 

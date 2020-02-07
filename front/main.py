@@ -8,6 +8,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QApplication, QMessageBox, QLineEdit, QWidget, QLabel, QGridLayout, QRadioButton, QComboBox, QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QFont, QPen, QIntValidator
+from termcolor import colored
 
 sys.path.append('utils/')
 import soc_front_use
@@ -20,6 +21,7 @@ class App(QMainWindow):
 
 		#################################################
 		##	STATIC VAR
+		print("[U.I.]\tStarting...")
 		self._DATA_ = data.Data()
 		self.pixmap = QPixmap(self._DATA_.get_pixmap())
 		self.title = self._DATA_.get_title()
@@ -29,12 +31,15 @@ class App(QMainWindow):
 		self.HEIGHT = self._DATA_.get_height()
 		self.LOCATIONS = self._DATA_.get_countrys()
 
+		print("[U.I.]\tCalling socket ")
 		#Sockets usage
-		_SOCKET_ = soc_front_use
+		self._SOCKET_ = soc_front_use.WEB_SERVICE(self._DATA_.get_ip(), self._DATA_.get_port())
 
+		print("[U.I.]\tCreating description")
 		#Screen button info
 		self.description = self._DATA_.get_randomized_product()
 
+		print("[U.I.]\tBreaking windows flags")
 		#Destroying Windows Flags
 		self.setWindowFlags(
 						QtCore.Qt.Window |
@@ -54,6 +59,7 @@ class App(QMainWindow):
 		self.drawProductButton()
 
 		self.show()
+		print("[U.I.]\tup.")
 
 	#####################################################
 	##	Paint event
@@ -83,6 +89,13 @@ class App(QMainWindow):
 				"QPushButton:hover:!pressed {background-color: #6e5f5a}")
 		self.ProductBtn.clicked.connect(self.productAppAction)
 
+	def process_data(self, data):
+		s = ""
+		for i in data:
+			s = s+str(i)
+			s = s+"#"
+		return s
+
 	######################################################
 	##	Python slots
 	@pyqtSlot()
@@ -98,7 +111,8 @@ class App(QMainWindow):
 		##	-customer_id
 		##	-country
 
-		country = LOCATIONS[0]
+		print("[CLICKED]\t Started static variables")
+		country = self.LOCATIONS[0]
 		invoice = 1234
 		stock_code = 1234
 		desc = self.description
@@ -106,11 +120,15 @@ class App(QMainWindow):
 		unit_price = 1.8
 		customer_id = 59999
 
-		_RESPONSE_ = _SOCKET_.send_data([invoice, stock_code, desc, quantity, unit_price, customer_id, country])
+		print("[STARTED]\t Sending data")
+		_d = self.process_data([invoice, stock_code, desc, quantity, unit_price, customer_id, country])
+		_RESPONSE_ = self._SOCKET_.send_data(_d)
 
 		if "[ERROR]" in _RESPONSE_:
 			print("An error ocurred on back-end")
 			return
+
+		print("[RECIVED] Apriori well runned")
 
 		#New product - Apriori based
 		self.description = _RESPONSE_[0]
