@@ -1,0 +1,112 @@
+################################################
+##	Used to recive requests and store into stacks while processed
+
+import socket
+import _thread
+import data_process
+
+class Server():
+
+	def __init__(self):
+		print("[STARTING] Initializing core variables")
+		self._S = socket.socket()
+		self._HOST = ''
+		self._PORT = 3000
+		self._BL = 128
+		self._LISTEN_TIMES = 100
+
+		print("[INITIALIZED] Calling data module")
+		self._PROCESS = data_process.Data()
+		print("Server well built")
+		print()
+
+		self.core() #Initializing system
+
+	############################################
+	##	NETWORK Methods
+	def new_client(self, client_socket, addr):
+		while True:
+			data = client_socket.recv(self._BL).decode() #Reciving data
+			rcData = data.split("#")
+
+			#####################################
+			##	Processing data recived
+			if(rcData[6] == 'France'):
+				response = self.apriori_french(rcData)
+				client_socket.send(response.encode())
+
+			elif(rcData[6] == 'Portugal'):
+				response = self.apriori_portugal(rcData)
+				client_socket.send(response.encode())
+
+			elif(rcData[6] == 'Sweden'):
+				response = self.apriori_swrden(rcData)
+				client_socket.send(response.encode())
+
+			else:
+				response = ""
+				client_socket.send(response.encode())
+			
+		client_socket.close() #Closing connection
+
+	def core(self):
+
+		print("[STARTING] Starting network services")
+		self._S.bind((self._HOST, self._PORT))
+		self._S.listen(self._LISTEN_TIMES)
+
+		print("[STARTED] Waiting connections")
+		while True:
+			c, addr = self._S.accept()
+			print("[+] Creating THREAD connection")
+			_thread.start_new_thread(self.new_client, (c, addr))
+		self._S.close()
+
+	##	End of NETWORK Methods
+	################################################
+
+	################################################
+	##	Methods
+	def apriori_french(self, data):
+		
+		product = data[2] # 2 -> description or product name
+
+		#Getting model and consequents
+		french = self._PROCESS.get_french_model()
+		french_antecedents = french['antecedents']
+		french_consequents = french['consequents']
+
+		#Adding to buffer queue
+		self.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+
+		n_c = list()
+		n_a = list()
+
+		#Converting frozen-set to list
+		for i in french_antecedents:
+			n_a.append(list(i))
+		for i in french_consequents:
+			n_c.append(list(i))
+
+		#Searching for results
+		index = 0
+		consequent = None #Consequent list to return
+		for i in n_a:
+			if i[0] == product:
+				consequent = list(n_c[index])
+				break
+			index += 1
+
+		############################################
+		##	Parse list to string in order
+		## 	to byte-encode it
+		if consequent == None:
+			return ""
+		else:
+			return self.list_to_string(consequent)
+
+	def list_to_setring(self, to_encode):
+		s = ""
+
+
+s = Server()
