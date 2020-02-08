@@ -27,19 +27,22 @@ class Server():
 	def new_client(self, client_socket, addr):
 		while True:
 			data = client_socket.recv(self._BL).decode() #Reciving data
-			rcData = data.split("#")
+
+			rcData = self.decoder_data(data)
+			# Now: Index 5 -> Country
+			#	   Index 6 -> Buffer data
 
 			#####################################
 			##	Processing data recived
-			if(rcData[6] == 'France'):
+			if(rcData[5] == 'France'):
 				response = self.apriori_french(rcData)
 				client_socket.send(response.encode())
 
-			elif(rcData[6] == 'Portugal'):
+			elif(rcData[5] == 'Portugal'):
 				response = self.apriori_portugal(rcData)
 				client_socket.send(response.encode())
 
-			elif(rcData[6] == 'Sweden'):
+			elif(rcData[5] == 'Sweden'):
 				response = self.apriori_swrden(rcData)
 				client_socket.send(response.encode())
 
@@ -73,7 +76,8 @@ class Server():
 
 	#BASICS
 	def add_customer_data(self, data):
-		self._PROCESS.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+		for i in data[6]:
+			self._PROCESS.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], i)
 
 	def decoder_data(self, data):
 		#Converting to list
@@ -90,7 +94,19 @@ class Server():
 
 	## INIT APRIORI SEC
 	def apriori_french(self, data):	#FRENCH METHOD
-		
+		# 5 -> país
+		# 6 -> Buffer dados
+
+		antecedents = data[6] # 6 -> Buffer de dados
+
+		#Getting model and consequents
+		french = self._PROCESS.get_french_model()
+		french_antecedents = french['antecedents']
+		french_consequents = french['consequents']
+
+		#Adding to buffer queue
+		self.add_customer_data(data)
+
 		product = data[2] # 2 -> description or product name
 
 		#Getting model and consequents
