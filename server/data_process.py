@@ -38,8 +38,8 @@ class Data():
 
 		print('[MODELS READY]\n')
 
-	def add_customer_data(self, invoice, stock_code, description, quantity, unit_price, customer_id, country):
-		self._UTILS.add_customer_data(invoice, stock_code, description, quantity, unit_price, customer_id, country)
+	def add_customer_data(self, invoice, stock_code, quantity, unit_price, customer_id, country, description):
+		self._UTILS.add_customer_data(invoice, stock_code, quantity, unit_price, customer_id, country, description)
 
 	def update_data(self):
 		thr = threading.Thread(target=self.update_data_slave, args=(), kwargs={})
