@@ -17,7 +17,7 @@ class Server():
 
 		print("[INITIALIZED] Calling data module")
 		self._PROCESS = data_process.Data()
-		print("Server well built")
+		print("[SERVER] Ready")
 		print()
 
 		self.core() #Initializing system
@@ -65,6 +65,8 @@ class Server():
 	##	End of NETWORK Methods
 	################################################
 
+	#----------------------------------------------#
+
 	################################################
 	##	Methods
 	################################################
@@ -72,6 +74,19 @@ class Server():
 	#BASICS
 	def add_customer_data(self, data):
 		self._PROCESS.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+
+	def decoder_data(self, data):
+		#Converting to list
+		aux = data.split('#')
+		buffer_ = aux[6].split('$')
+
+		#Adding everything to a unique var
+		r = list()
+		for i in range(len(data)-1):
+			r.append(data[i])
+		r.append(buffer_)
+
+		return r
 
 	## INIT APRIORI SEC
 	def apriori_french(self, data):	#FRENCH METHOD
