@@ -50,7 +50,7 @@ class Server():
 				client_socket.send(response.encode())
 
 			elif(rcData[5] == 'Sweden'):
-				response = self.apriori_swrden(rcData)
+				response = self.apriori_sweden(rcData)
 				client_socket.send(response.encode())
 
 			else:
@@ -192,7 +192,7 @@ class Server():
 
 	def apriori_sweden(self, data):	#SWEDEN METHOD
 		
-		product = data[2] # 2 -> description or product name
+		antecedents = data[6] # 6 -> Buffer de dados
 
 		#Getting model and consequents
 		sweden = self._PROCESS.get_sweden_model()
