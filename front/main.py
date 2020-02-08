@@ -116,7 +116,8 @@ class App(QMainWindow):
 		print("[NETWORK]\tStarted connection")
 
 	def send_data(self, data):
-		resp = self.soc.send(data.encode())
+		self.soc.send(data.encode())
+		resp = self.soc.recv(self._data_.get_buffer_len())
 		print("[NETWORK]\tResponse recived")
 		return resp.decode()
 
@@ -167,7 +168,8 @@ class App(QMainWindow):
 		#Storing response to local buffer
 		self.local_buffer.append(str(resp))
 
-		self.user_flag = True
+		print("New local buffer: " + str(self.local_buffer))
+
 		print("[-] Thread is down")
 		self.soc.close()
 
@@ -177,6 +179,7 @@ class App(QMainWindow):
 	@pyqtSlot()
 	def productAppAction(self):
 		_thread.start_new_thread(self.mailer_thread, (self.invoice, self.stock_code, self.quantity, self.unit_price, self.customer_id, self.COUNTRY) )
+		print(self.local_buffer)
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
