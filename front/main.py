@@ -1,6 +1,7 @@
 import sys
 import numpy as numpy
 import _thread
+import socket
 
 #pyqt
 from PyQt5 import QtCore, QtWidgets, QtGui
@@ -25,6 +26,14 @@ class App(QMainWindow):
 		self.TOP = self._data_.get_top()
 		self.WIDTH = self._data_.get_width()
 		self.HEIGHT = self._data_.get_height()
+
+		#################################################
+		##	STATIC SERVER UTILS VAR
+		self.invoice = self._data_.get_invoice()
+		self.stock_code = self._data_.get_stock_code()
+		self.quantity = self._data_.get_quantity()
+		self.unit_price = self._data_.get_unit_price()
+		self.customer_id = self._data_.get_customer_id()
 		self.COUNTRY = self._data_.get_countrys()[0]
 
 		#This local buffer retains information about all
@@ -55,7 +64,6 @@ class App(QMainWindow):
 		self.drawProductButton()
 
 		self.show()
-		print("[U.I.]\tup.")
 
 	#####################################################
 	##	Paint event
@@ -108,7 +116,7 @@ class App(QMainWindow):
 		print("[NETWORK]\tStarted connection")
 
 	def send_data(self, data):
-		resp = self.soc.send_data(data.encode())
+		resp = self.soc.send(data.encode())
 		print("[NETWORK]\tResponse recived")
 		return resp.decode()
 
@@ -144,6 +152,8 @@ class App(QMainWindow):
 		
 		print("[+]\tNew thread is up")
 		self.user_flag = False
+
+		self.start_connection()
 
 		#Encoding information
 		print("[THREAD]\tEncoding data")
