@@ -1,6 +1,4 @@
 import sys
-import asyncio
-import time
 import numpy as numpy
 import _thread
 
@@ -11,7 +9,6 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QApplication, QMessageBox,
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QFont, QPen, QIntValidator
 
 sys.path.append('utils/')
-import soc_front_use
 import data
 
 class App(QMainWindow):
@@ -21,15 +18,14 @@ class App(QMainWindow):
 
 		#################################################
 		##	STATIC VAR
-		print("[U.I.]\tStarting...")
-		self._DATA_ = data.Data()
-		self.pixmap = QPixmap(self._DATA_.get_pixmap())
-		self.title = self._DATA_.get_title()
-		self.LEFT = self._DATA_.get_left()
-		self.TOP = self._DATA_.get_top()
-		self.WIDTH = self._DATA_.get_width()
-		self.HEIGHT = self._DATA_.get_height()
-		self.LOCATIONS = self._DATA_.get_countrys()
+		self._data_ = data.Data()
+		self.pixmap = QPixmap(self._data_.get_pixmap())
+		self.title = self._data_.get_title()
+		self.LEFT = self._data_.get_left()
+		self.TOP = self._data_.get_top()
+		self.WIDTH = self._data_.get_width()
+		self.HEIGHT = self._data_.get_height()
+		self.COUNTRY = self._data_.get_countrys()[0]
 
 		#This local buffer retains information about all
 		#user data
@@ -37,15 +33,9 @@ class App(QMainWindow):
 		#Anti-crashing flag
 		self.user_flag = True
 
-		print("[U.I.]\tCalling socket ")
-		#Sockets usage
-		self._SOCKET_ = soc_front_use.WEB_SERVICE(self._DATA_.get_ip(), self._DATA_.get_port())
-
-		print("[U.I.]\tCreating description")
 		#Screen button info
-		self.description = self._DATA_.get_randomized_product()
+		self.local_buffer.append(self._data_.get_randomized_product())
 
-		print("[U.I.]\tBreaking windows flags")
 		#Destroying Windows Flags
 		self.setWindowFlags(
 						QtCore.Qt.Window |
@@ -82,7 +72,13 @@ class App(QMainWindow):
 		painter.setPen(pen)
 
 	def drawProductButton(self):
-		self.ProductBtn = QPushButton(self.description, self)
+
+		#This conditional will tell the button what to display
+		if self.user_flag:
+			self.ProductBtn = QPushButton(self.local_buffer[-1], self)
+		else:
+			self.ProductBtn = QPushButton("Waiting...", self)
+
 		self.ProductBtn.setVisible(True)
 		self.ProductBtn.resize(490,120)
 		self.ProductBtn.move(157,345)
@@ -93,53 +89,84 @@ class App(QMainWindow):
 				"QPushButton {font-size: 20px}"
 				"QPushButton:hover {background-color: #a3867c}"
 				"QPushButton:hover:!pressed {background-color: #6e5f5a}")
-		self.ProductBtn.clicked.connect(self.productAppAction)
 
-	def process_data(self, data):
-		s = ""
-		for i in data:
-			s = s+str(i)
-			s = s+"#"
+		#This conditional will acept action (or not)
+		if self.user_flag:
+			self.ProductBtn.clicked.connect(self.productAppAction)
+
+	##	End of paint events
+	######################################################
+
+	## -------------------------------------------------#
+
+	#####################################################
+	##	NETWORK
+
+	def start_connection(self):
+		self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.soc.connect((self._data_.get_ip(), self._data_.get_port()))
+		print("[NETWORK]\tStarted connection")
+
+	def send_data(self, data):
+		resp = self.soc.send_data(data.encode())
+		print("[NETWORK]\tResponse recived")
+		return resp.decode()
+
+	def kill_connection(self):
+		self.soc.close()
+		print("[NETWORK]\tClosed connection")
+
+	##	End of NETWORK events
+	######################################################
+
+	## ------------------------------------------------- #
+
+	######################################################
+	##	UTILS
+
+	def encode_data(self, data, flag, s = ""):
+		#True  -> encodes buffer
+		#False -> encodes all
+
+		if flag:
+			#buffer encoder uses $
+			for i in range(len(data)):
+				s += "$"+str(data[i])
+		else:
+			#simple encoder uses #
+			for i in data:
+				s += str(i) + "#"
+
 		return s
+
+
+	def mailer_thread(self, invoice, stock_code, quantity, unity_price, customer_id, country, ENCODED_STRING = ""):
+		
+		print("[+]\tNew thread is up")
+		self.user_flag = False
+
+		#Encoding information
+		print("[THREAD]\tEncoding data")
+		ENCODED_STRING += self.encode_data([invoice, stock_code, quantity, unity_price, customer_id, country], 0)
+		ENCODED_STRING += self.encode_data(self.local_buffer, 1)
+
+		#NETWORK
+		print("[THREAD]\tSending data")
+		resp = self.send_data(ENCODED_STRING)
+
+		#Storing response to local buffer
+		self.local_buffer.append(str(resp))
+
+		self.user_flag = True
+		print("[-] Thread is down")
+		self.soc.close()
+
 
 	######################################################
 	##	Python slots
 	@pyqtSlot()
 	def productAppAction(self):
-		
-		#########################
-		##	DATA ORDER
-		##	-invoice
-		##	-stock_code
-		##	-description
-		##	-quantity
-		##	-unit_price
-		##	-customer_id
-		##	-country
-
-		print("[CLICKED]\t Started static variables")
-		country = self.LOCATIONS[0]
-		invoice = 1234
-		stock_code = 1234
-		desc = self.description
-		quantity = 1
-		unit_price = 1.8
-		customer_id = 59999
-
-		print("[STARTED]\t Sending data")
-		_d = self.process_data([invoice, stock_code, desc, quantity, unit_price, customer_id, country])
-		_RESPONSE_ = self._SOCKET_.send_data(_d)
-
-		if "[ERROR]" in _RESPONSE_:
-			print("An error ocurred on back-end")
-			return
-
-		print("[RECIVED] Apriori well runned")
-
-		#New product - Apriori based
-		self.description = _RESPONSE_[0]
-
-		return _RESPONSE_
+		_thread.start_new_thread(self.mailer_thread, (self.invoice, self.stock_code, self.quantity, self.unit_price, self.customer_id, self.COUNTRY) )
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
