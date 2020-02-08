@@ -94,20 +94,8 @@ class Server():
 
 	## INIT APRIORI SEC
 	def apriori_french(self, data):	#FRENCH METHOD
-		# 5 -> país
-		# 6 -> Buffer dados
 
 		antecedents = data[6] # 6 -> Buffer de dados
-
-		#Getting model and consequents
-		french = self._PROCESS.get_french_model()
-		french_antecedents = french['antecedents']
-		french_consequents = french['consequents']
-
-		#Adding to buffer queue
-		self.add_customer_data(data)
-
-		product = data[2] # 2 -> description or product name
 
 		#Getting model and consequents
 		french = self._PROCESS.get_french_model()
@@ -130,7 +118,11 @@ class Server():
 		index = 0
 		consequent = None #Consequent list to return
 		for i in n_a:
-			if i[0] == product:
+			if not len(set(i).intersection(antecedents)): 
+				# Explaninf if
+				# a = [1,2,4]
+				# b = [1,2,3]  
+				# a & b = [1, 2]
 				consequent = list(n_c[index])
 				break
 			index += 1
@@ -145,7 +137,7 @@ class Server():
 
 	def apriori_portugal(self, data):	#PORTUGEASE METHOD
 		
-		product = data[2] # 2 -> description or product name
+		antecedents = data[6] # 6 -> Buffer de dados
 
 		#Getting model and consequents
 		portugal = self._PROCESS.get_portugease_model()
@@ -168,7 +160,7 @@ class Server():
 		index = 0
 		consequent = None #Consequent list to return
 		for i in n_a:
-			if i[0] == product:
+			if not len(set(i).intersection(antecedents)): 
 				consequent = list(n_c[index])
 				break
 			index += 1
@@ -206,7 +198,7 @@ class Server():
 		index = 0
 		consequent = None #Consequent list to return
 		for i in n_a:
-			if i[0] == product:
+			if not len(set(i).intersection(antecedents)): 
 				consequent = list(n_c[index])
 				break
 			index += 1
