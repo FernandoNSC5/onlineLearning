@@ -6,7 +6,7 @@ class xls_utils:
 	def __init__(self):
 		self.input_data = list()
 
-	def add_customer_data(self, invoice, stock_code, description, quantity, unit_price, customerID, country):
+	def add_customer_data(self, invoice, stock_code, quantity, unit_price, customerID, country, description):
 		data = list()
 		data.append(invoice)
 		data.append(stock_code)
