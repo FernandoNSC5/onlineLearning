@@ -82,10 +82,8 @@ class App(QMainWindow):
 	def drawProductButton(self):
 
 		#This conditional will tell the button what to display
-		if self.user_flag:
-			self.ProductBtn = QPushButton(self.local_buffer[-1], self)
-		else:
-			self.ProductBtn = QPushButton("Waiting...", self)
+		self.ProductBtn = QPushButton(self.local_buffer[-1], self)
+
 
 		self.ProductBtn.setVisible(True)
 		self.ProductBtn.resize(490,120)
@@ -99,8 +97,7 @@ class App(QMainWindow):
 				"QPushButton:hover:!pressed {background-color: #6e5f5a}")
 
 		#This conditional will acept action (or not)
-		if self.user_flag:
-			self.ProductBtn.clicked.connect(self.productAppAction)
+		self.ProductBtn.clicked.connect(self.productAppAction)
 
 	##	End of paint events
 	######################################################
@@ -152,7 +149,10 @@ class App(QMainWindow):
 	def mailer_thread(self, invoice, stock_code, quantity, unity_price, customer_id, country, ENCODED_STRING = ""):
 		
 		print("[+]\tNew thread is up")
-		self.user_flag = False
+		#Button Manipulation
+		self.ProductBtn.setText("Waiting...")
+		self.ProductBtn.setEnabled(False)
+		self.update()
 
 		self.start_connection()
 
@@ -168,9 +168,13 @@ class App(QMainWindow):
 		#Storing response to local buffer
 		self.local_buffer.append(str(resp))
 
-		print("New local buffer: " + str(self.local_buffer))
+		print("New local buffer: " + str(self.local_buffer[-1]))
 
 		print("[-] Thread is down")
+		print("Button Manipulation")
+		self.ProductBtn.setText(self.local_buffer[-1])
+		self.ProductBtn.setEnabled(True)
+		self.update()
 		self.soc.close()
 
 
@@ -179,7 +183,6 @@ class App(QMainWindow):
 	@pyqtSlot()
 	def productAppAction(self):
 		_thread.start_new_thread(self.mailer_thread, (self.invoice, self.stock_code, self.quantity, self.unit_price, self.customer_id, self.COUNTRY) )
-		print(self.local_buffer)
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
