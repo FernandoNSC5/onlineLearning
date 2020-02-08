@@ -67,7 +67,14 @@ class Server():
 
 	################################################
 	##	Methods
-	def apriori_french(self, data):
+	################################################
+
+	#BASICS
+	def add_customer_data(self, data):
+		self._PROCESS.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+
+	## INIT APRIORI SEC
+	def apriori_french(self, data):	#FRENCH METHOD
 		
 		product = data[2] # 2 -> description or product name
 
@@ -77,7 +84,7 @@ class Server():
 		french_consequents = french['consequents']
 
 		#Adding to buffer queue
-		self.add_customer_data(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+		self.add_customer_data(data)
 
 		n_c = list()
 		n_a = list()
@@ -103,10 +110,82 @@ class Server():
 		if consequent == None:
 			return ""
 		else:
-			return self.list_to_string(consequent)
+			return str(consequent[0])
 
-	def list_to_setring(self, to_encode):
-		s = ""
+	def apriori_portugal(self, data):	#PORTUGEASE METHOD
+		
+		product = data[2] # 2 -> description or product name
 
+		#Getting model and consequents
+		portugal = self._PROCESS.get_portugease_model()
+		portugal_antecedents = portugal['antecedents']
+		portugal_consequents = portugal['consequents']
+
+		#Adding to buffer queue
+		self.add_customer_data(data)
+
+		n_c = list()
+		n_a = list()
+
+		#Converting frozen-set to list
+		for i in portugal_antecedents:
+			n_a.append(list(i))
+		for i in portugal_consequents:
+			n_c.append(list(i))
+
+		#Searching for results
+		index = 0
+		consequent = None #Consequent list to return
+		for i in n_a:
+			if i[0] == product:
+				consequent = list(n_c[index])
+				break
+			index += 1
+
+		############################################
+		##	Parse list to string in order
+		## 	to byte-encode it
+		if consequent == None:
+			return ""
+		else:
+			return str(consequent[0])
+
+	def apriori_sweden(self, data):	#SWEDEN METHOD
+		
+		product = data[2] # 2 -> description or product name
+
+		#Getting model and consequents
+		sweden = self._PROCESS.get_sweden_model()
+		sweden_antecedents = sweden['antecedents']
+		sweden_consequents = sweden['consequents']
+
+		#Adding to buffer queue
+		self.add_customer_data(data)
+
+		n_c = list()
+		n_a = list()
+
+		#Converting frozen-set to list
+		for i in sweden_antecedents:
+			n_a.append(list(i))
+		for i in sweden_consequents:
+			n_c.append(list(i))
+
+		#Searching for results
+		index = 0
+		consequent = None #Consequent list to return
+		for i in n_a:
+			if i[0] == product:
+				consequent = list(n_c[index])
+				break
+			index += 1
+
+		############################################
+		##	Parse list to string in order
+		## 	to byte-encode it
+		if consequent == None:
+			return ""
+		else:
+			return str(consequent[0])
 
 s = Server()
