@@ -90,7 +90,13 @@ class Server():
 		#Converting to list
 		aux = data.split('#')
 		buffer_ = aux[6].split('$')
+		
 		#Cleanning buffer
+		_buffer_ = list()
+		for i in buffer_:
+			if i != '':
+				_buffer_.append(i)
+		buffer_ = _buffer_
 
 		#Adding everything to a unique var
 		r = list()
