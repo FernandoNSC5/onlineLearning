@@ -6,7 +6,7 @@ class Data():
 
 		###########################
 		##	WEB
-		self._IP_ = '192.168.15.13'
+		self._IP_ = '192.168.1.186'
 		self._PORT_ = 3000
 		self._BUFFER_LENGHT_ = 128
 		self._HOST_NAME_ = ""
@@ -19,6 +19,14 @@ class Data():
 		self._TOP_ = 10
 		self._WIDTH_ = 800
 		self._HEIGHT_ = 600
+
+		############################
+		##	Hardcoded data
+		self._INVOICE_ = 123
+		self._STOCK_CODE_ = 666
+		self._QUANTITY_ = 1
+		self._UNIT_PRICE_ = 3.99
+		self._CUSTOMER_ID_ = 66
 
 		############################
 		## Hardcoded products
@@ -429,3 +437,18 @@ class Data():
 
 	def get_products(self):
 		return self._PRODUCTS_
+
+	def get_invoice(self):
+		return self._INVOICE_
+
+	def get_stock_code(self):
+		return self._STOCK_CODE_
+
+	def get_quantity(self):
+		return self._QUANTITY_
+
+	def get_unit_price(self):
+		return self._UNIT_PRICE_
+
+	def get_customer_id(self):
+		return self._CUSTOMER_ID_
