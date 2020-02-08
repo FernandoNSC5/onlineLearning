@@ -2,13 +2,13 @@ import sys
 import asyncio
 import time
 import numpy as numpy
+import _thread
 
 #pyqt
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QApplication, QMessageBox, QLineEdit, QWidget, QLabel, QGridLayout, QRadioButton, QComboBox, QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QFont, QPen, QIntValidator
-from termcolor import colored
 
 sys.path.append('utils/')
 import soc_front_use
@@ -30,6 +30,12 @@ class App(QMainWindow):
 		self.WIDTH = self._DATA_.get_width()
 		self.HEIGHT = self._DATA_.get_height()
 		self.LOCATIONS = self._DATA_.get_countrys()
+
+		#This local buffer retains information about all
+		#user data
+		self.local_buffer = list()
+		#Anti-crashing flag
+		self.user_flag = True
 
 		print("[U.I.]\tCalling socket ")
 		#Sockets usage
