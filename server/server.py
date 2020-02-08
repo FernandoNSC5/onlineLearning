@@ -26,7 +26,10 @@ class Server():
 	##	NETWORK Methods
 	def new_client(self, client_socket, addr):
 		while True:
+			
 			data = client_socket.recv(self._BL).decode() #Reciving data
+			if data == '' or len(data) == 0:
+				continue
 
 			rcData = self.decoder_data(data)
 			# Now: Index 5 -> Country
@@ -35,7 +38,11 @@ class Server():
 			#####################################
 			##	Processing data recived
 			if(rcData[5] == 'France'):
+				print("Calling france apriori")
 				response = self.apriori_french(rcData)
+				print("Apriori response: " + str(response))
+				print("Encoded:")
+				print(response.encode())
 				client_socket.send(response.encode())
 
 			elif(rcData[5] == 'Portugal'):
@@ -83,11 +90,16 @@ class Server():
 		#Converting to list
 		aux = data.split('#')
 		buffer_ = aux[6].split('$')
+		#Cleanning buffer
 
 		#Adding everything to a unique var
 		r = list()
-		for i in range(len(data)-1):
-			r.append(data[i])
+		counter = 0
+		for i in aux:
+			if counter == 6:
+				break
+			r.append(i)
+			counter += 1
 		r.append(buffer_)
 
 		return r
@@ -127,12 +139,17 @@ class Server():
 				break
 			index += 1
 
+		print("Antecedents: " + str(antecedents))
+		print("Consequents: " + str(consequent))
+
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
 		if consequent == None:
-			return ""
+			print("No consequent")
+			return "none"
 		else:
+			print("Returning consequent: " + str(consequent[0]))
 			return str(consequent[0])
 
 	def apriori_portugal(self, data):	#PORTUGEASE METHOD
