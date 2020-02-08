@@ -135,5 +135,5 @@ class Data():
 	def get_portugease_model(self):
 		return self.portugease_models
 
-	def get_sweeden_model(self):
+	def get_sweden_model(self):
 		return self.sweedish_models
