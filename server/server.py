@@ -38,22 +38,22 @@ class Server():
 			#####################################
 			##	Processing data recived
 			if(rcData[5] == 'France'):
-				print("Calling france apriori")
+				print("[SERVER] France selected")
 				response = self.apriori_french(rcData)
-				print("Apriori response: " + str(response))
-				print("Encoded:")
-				print(response.encode())
 				client_socket.send(response.encode())
 
 			elif(rcData[5] == 'Portugal'):
+				print("[SERVER] Portugal selected")
 				response = self.apriori_portugal(rcData)
 				client_socket.send(response.encode())
 
 			elif(rcData[5] == 'Sweden'):
+				print("[SERVER] Sweden selected")
 				response = self.apriori_sweden(rcData)
 				client_socket.send(response.encode())
 
 			else:
+				print("[SERVER] Nothing selected")
 				response = ""
 				client_socket.send(response.encode())
 			
@@ -188,6 +188,9 @@ class Server():
 				break
 			index += 1
 
+		print("Antecedents: " + str(antecedents))
+		print("Consequents: " + str(consequent))
+
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
@@ -225,6 +228,9 @@ class Server():
 				consequent = list(n_c[index])
 				break
 			index += 1
+
+		print("Antecedents: " + str(antecedents))
+		print("Consequents: " + str(consequent))
 
 		############################################
 		##	Parse list to string in order
