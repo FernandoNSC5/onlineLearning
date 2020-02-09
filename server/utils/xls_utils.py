@@ -21,6 +21,9 @@ class xls_utils:
 	def flush_memory(self):
 		self.input_data = list()
 
+	def print_buffer(self):
+		print(self.input_data)
+
 	def write_xls(self):
 		print("[WRITING] Loading original data")
 		wb = load_workbook("../Online_retail.xlsx")
