@@ -58,6 +58,7 @@ class Server():
 				response = ""
 				client_socket.send(response.encode())
 
+			#Writes buffer to xlsx every 5 requests
 			if counter_conn % 5 == 0:
 				print("[SERVER] On buffer:")
 				self._PROCESS.print_buffer_data()
@@ -210,10 +211,10 @@ class Server():
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
-		if consequent == None:
-			return ""
+		if len(consequent):
+			return consequent[0]
 		else:
-			return str(consequent[0])
+			return "reset"
 
 	def apriori_sweden(self, data):	#SWEDEN METHOD
 		
@@ -253,9 +254,9 @@ class Server():
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
-		if consequent == None:
-			return ""
+		if len(consequent):
+			return consequent[0]
 		else:
-			return str(consequent[0])
+			return "reset"
 
 s = Server()
