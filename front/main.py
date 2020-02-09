@@ -34,7 +34,7 @@ class App(QMainWindow):
 		self.quantity = self._data_.get_quantity()
 		self.unit_price = self._data_.get_unit_price()
 		self.customer_id = self._data_.get_customer_id()
-		self.COUNTRY = self._data_.get_countrys()[0]
+		self.COUNTRY = self._data_.get_countrys()[2]
 
 		#This local buffer retains information about all
 		#user data
@@ -168,7 +168,6 @@ class App(QMainWindow):
 		#Storing response to local buffer
 		self.local_buffer.append(str(resp))
 
-		print("New local buffer: " + str(self.local_buffer[-1]))
 
 		print("[-] Thread is down")
 		print("Button Manipulation")
