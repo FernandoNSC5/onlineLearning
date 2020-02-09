@@ -6,7 +6,7 @@ class Data():
 
 		###########################
 		##	WEB
-		self._IP_ = '192.168.15.14'
+		self._IP_ = '172.17.193.241'
 		self._PORT_ = 3000
 		self._BUFFER_LENGHT_ = 128
 		self._HOST_NAME_ = ""
