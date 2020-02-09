@@ -34,7 +34,7 @@ class App(QMainWindow):
 		self.quantity = self._data_.get_quantity()
 		self.unit_price = self._data_.get_unit_price()
 		self.customer_id = self._data_.get_customer_id()
-		self.COUNTRY = self._data_.get_countrys()[2]
+		self.COUNTRY = self._data_.get_countrys()[0]
 
 		#This local buffer retains information about all
 		#user data
@@ -43,7 +43,7 @@ class App(QMainWindow):
 		self.user_flag = True
 
 		#Screen button info
-		self.local_buffer.append("RED TOADSTOOL LED NIGHT LIGHT")
+		self.local_buffer.append(self._data_.get_randomized_product())
 		#Destroying Windows Flags
 		self.setWindowFlags(
 						QtCore.Qt.Window |
@@ -164,9 +164,13 @@ class App(QMainWindow):
 		print("[THREAD]\tSending data")
 		resp = self.send_data(ENCODED_STRING)
 
-		#Storing response to local buffer
-		self.local_buffer.append(str(resp))
-
+		if resp == 'reset':
+			#If resp == reset, restart apriori function
+			self.local_buffer = list()
+			self.local_buffer.append(self._data_.get_randomized_product())
+		else:
+			#Storing response to local buffer
+			self.local_buffer.append(str(resp))
 
 		print("[-] Thread is down")
 		print("Button Manipulation")
