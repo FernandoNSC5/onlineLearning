@@ -1,6 +1,7 @@
 ################################################
 ##	Used to recive requests and store into stacks while processed
 
+import random
 import socket
 import _thread
 import data_process
@@ -134,29 +135,29 @@ class Server():
 
 		#Searching for results
 		index = 0
-		consequent = None #Consequent list to return
+		consequents = [] #Consequents list to return
 		for i in n_a:
-			if not len(set(i).intersection(antecedents)): 
-				# Explaninf if
-				# a = [1,2,4]
-				# b = [1,2,3]  
-				# a & b = [1, 2]
-				consequent = list(n_c[index])
-				break
+			exists = 0
+			for j in antecedents:
+				if j in set(i):
+					exists+=1
+			if exists:
+				consequents.append([n_c[index], exists])
+			consequents.sort(key = lambda x: x[1])
 			index += 1
 
 		print("Antecedents: " + str(antecedents))
-		print("Consequents: " + str(consequent))
 
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
-		if consequent == None:
-			print("No consequent")
-			return "none"
+		if len(consequents):
+			print("Returning consequents: " + str(consequents))
+			c = consequents[random.randint(0, len(consequents) - 1)]
+			return str(c[0][random.randint(0, len(c[0]) - 1)])
 		else:
-			print("Returning consequent: " + str(consequent[0]))
-			return str(consequent[0])
+			print("No consequents")
+			return ""
 
 	def apriori_portugal(self, data):	#PORTUGEASE METHOD
 		

@@ -43,8 +43,7 @@ class App(QMainWindow):
 		self.user_flag = True
 
 		#Screen button info
-		self.local_buffer.append(self._data_.get_randomized_product())
-
+		self.local_buffer.append("RED TOADSTOOL LED NIGHT LIGHT")
 		#Destroying Windows Flags
 		self.setWindowFlags(
 						QtCore.Qt.Window |
