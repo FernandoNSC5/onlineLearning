@@ -41,7 +41,11 @@ class Data():
 	def add_customer_data(self, invoice, stock_code, quantity, unit_price, customer_id, country, description):
 		self._UTILS.add_customer_data(invoice, stock_code, quantity, unit_price, customer_id, country, description)
 
+	def print_buffer_data(self):
+		self._UTILS.print_buffer()
+
 	def update_data(self):
+		print("[THREADING]\tPreparing to write data")
 		thr = threading.Thread(target=self.update_data_slave, args=(), kwargs={})
 		thr.start()
 
