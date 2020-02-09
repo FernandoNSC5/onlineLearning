@@ -26,7 +26,7 @@ class xls_utils:
 
 	def write_xls(self):
 		print("[WRITING] Loading original data")
-		wb = load_workbook("../Online_retail.xlsx")
+		wb = load_workbook('server/Online_retail.xlsx')
 		ws = wb.worksheets[0]
 		print("[WRITING] Appending new data")
 
