@@ -25,7 +25,7 @@ class Server():
 
 	############################################
 	##	NETWORK Methods
-	def new_client(self, client_socket, addr):
+	def new_client(self, client_socket, addr, counter_conn):
 		while True:
 			
 			data = client_socket.recv(self._BL).decode() #Reciving data
@@ -57,6 +57,11 @@ class Server():
 				print("[SERVER] Nothing selected")
 				response = ""
 				client_socket.send(response.encode())
+
+			if counter_conn % 5 == 0:
+				print("[SERVER] On buffer:")
+				self._PROCESS.print_buffer_data()
+				self._PROCESS.update_data()
 			
 		client_socket.close() #Closing connection
 
@@ -65,12 +70,14 @@ class Server():
 		print("[STARTING] Starting network services")
 		self._S.bind((self._HOST, self._PORT))
 		self._S.listen(self._LISTEN_TIMES)
+		counter = 0
 
 		print("[STARTED] Waiting connections")
 		while True:
 			c, addr = self._S.accept()
+			counter += 1
 			print("[+] Creating THREAD connection")
-			_thread.start_new_thread(self.new_client, (c, addr))
+			_thread.start_new_thread(self.new_client, (c, addr, counter))
 		self._S.close()
 
 	##	End of NETWORK Methods
@@ -133,31 +140,33 @@ class Server():
 		for i in french_consequents:
 			n_c.append(list(i))
 
+		#Deleting antecedents from consequent list
+		index = 0
+		for i in n_c:
+			for j in antecedents:
+				if j in i:
+					n_c[index].remove(j)
+			index += 1
+
 		#Searching for results
 		index = 0
-		consequents = [] #Consequents list to return
+		consequent = None #Consequent list to return
 		for i in n_a:
-			exists = 0
-			for j in antecedents:
-				if j in set(i):
-					exists+=1
-			if exists:
-				consequents.append([n_c[index], exists])
-			consequents.sort(key = lambda x: x[1])
+			if not len(set(i).intersection(antecedents)): 
+				consequent = list(n_c[index])
+				break
 			index += 1
 
 		print("Antecedents: " + str(antecedents))
+		print("Consequents: " + str(consequent))
 
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
-		if len(consequents):
-			print("Returning consequents: " + str(consequents))
-			c = consequents[random.randint(0, len(consequents) - 1)]
-			return str(c[0][random.randint(0, len(c[0]) - 1)])
+		if len(consequent):
+			return consequent[0]
 		else:
-			print("No consequents")
-			return ""
+			return "reset"
 
 	def apriori_portugal(self, data):	#PORTUGEASE METHOD
 		
