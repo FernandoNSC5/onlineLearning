@@ -118,6 +118,15 @@ class Server():
 
 		return r
 
+	def n_cleaner(self, n_c, antecedents):
+		index = 0
+		for i in n_c:
+			for j in antecedents:
+				if j in i:
+					n_c[index].remove(j)
+			index += 1
+		return n_c
+
 	## INIT APRIORI SEC
 	def apriori_french(self, data):	#FRENCH METHOD
 
@@ -141,12 +150,7 @@ class Server():
 			n_c.append(list(i))
 
 		#Deleting antecedents from consequent list
-		index = 0
-		for i in n_c:
-			for j in antecedents:
-				if j in i:
-					n_c[index].remove(j)
-			index += 1
+		n_c = self.n_cleaner(n_c, antecedents)
 
 		#Searching for results
 		index = 0
@@ -189,6 +193,8 @@ class Server():
 		for i in portugal_consequents:
 			n_c.append(list(i))
 
+		n_c = self.n_cleaner(n_c, antecedents)
+
 		#Searching for results
 		index = 0
 		consequent = None #Consequent list to return
@@ -229,6 +235,8 @@ class Server():
 			n_a.append(list(i))
 		for i in sweden_consequents:
 			n_c.append(list(i))
+
+		n_c = self.n_cleaner(n_c, antecedents)
 
 		#Searching for results
 		index = 0
