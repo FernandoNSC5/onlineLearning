@@ -32,11 +32,21 @@ for i in n_a:
 #Searching for results
 index = 0
 consequent = set()
+print("\n\nPrinting Intersection of " + str(antecedents))
 for i in n_a:
+	if antecedents == i:
+		consequent.add(str(n_c[index]))
+	index+=1
+
+'''index = 0
+consequent = set()
+print("\n\nPrinting Intersection of " + str(antecedents))
+for i in n_a:
+	print(str(set(i).intersection(antecedents)))
 	if not len(set(i).intersection(antecedents)):
 		consequent.add(str(n_c[index])) 
 	index += 1
-
+'''
 #printing
 print('\n\nResponse:')
 for i in consequent:
