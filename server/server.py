@@ -155,12 +155,11 @@ class Server():
 
 		#Searching for results
 		index = 0
-		consequent = None #Consequent list to return
+		consequent = set() #Consequent list to return
 		for i in n_a:
-			if not len(set(i).intersection(antecedents)): 
-				consequent = list(n_c[index])
-				break
-			index += 1
+			if antecedents == i:
+				consequent.add(str(n_c[index]))
+			index+=1
 
 		print("Antecedents: " + str(antecedents))
 		print("Consequents: " + str(consequent))
@@ -198,12 +197,11 @@ class Server():
 
 		#Searching for results
 		index = 0
-		consequent = None #Consequent list to return
+		consequent = set() #Consequent list to return
 		for i in n_a:
-			if not len(set(i).intersection(antecedents)): 
-				consequent = list(n_c[index])
-				break
-			index += 1
+			if antecedents == i:
+				consequent.add(str(n_c[index]))
+			index+=1
 
 		print("Antecedents: " + str(antecedents))
 		print("Consequents: " + str(consequent))
@@ -241,12 +239,11 @@ class Server():
 
 		#Searching for results
 		index = 0
-		consequent = None #Consequent list to return
+		consequent = set() #Consequent list to return
 		for i in n_a:
-			if not len(set(i).intersection(antecedents)): 
-				consequent = list(n_c[index])
-				break
-			index += 1
+			if antecedents == i:
+				consequent.add(str(n_c[index]))
+			index+=1
 
 		print("Antecedents: " + str(antecedents))
 		print("Consequents: " + str(consequent))
