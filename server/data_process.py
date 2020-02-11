@@ -109,7 +109,7 @@ class Data():
 		frq_items = apriori(self.france_balance, min_support = 0.05, use_colnames = True)   
 		rules = association_rules(frq_items, metric ="lift", min_threshold = 1) 
 		rules = rules.sort_values(['confidence', 'lift'], ascending =[False, False]) 
-		return rules.head()
+		return rules
 
 	def create_portugease_models(self):
 		frq_items = apriori(self.portugal_balance, min_support = 0.05, use_colnames = True)   
