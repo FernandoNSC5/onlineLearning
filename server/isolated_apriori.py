@@ -17,16 +17,19 @@ n_a = list()
 n_c = list() #this is not a hash -> consequent value store
 
 #Processing model results
+print("[APRIORI]\tHashing french model")
 for i in f_a:
 	n_a.append(HASHER(i))
 for i in f_c:
 	n_c.append(list(i))
 
 #Generating subsequent array
+print("[APRIORI]\tCreating response list")
 r = list()
 for i in range(len(n_a)):
 	if n_a[i] == antecedents_h:
 		r.append(n_c[i])
 
+print("[APRIORI]\tPrinting response")
 for i in r:
 	print(i)
