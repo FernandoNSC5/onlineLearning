@@ -30,6 +30,6 @@ for i in range(len(n_a)):
 	if n_a[i] == antecedents_h:
 		r.append(n_c[i])
 
-print("[APRIORI]\tPrinting response")
+print("[APRIORI]\tPrinting response\n")
 for i in r:
 	print(i)
