@@ -119,19 +119,14 @@ class Server():
 
 		return r
 
-	def n_cleaner(self, n_c, antecedents):
-		index = 0
-		for i in n_c:
-			for j in antecedents:
-				if j in i:
-					n_c[index].remove(j)
-			index += 1
-		return n_c
-
 	## INIT APRIORI SEC
 	def apriori_french(self, data):	#FRENCH METHOD
 
+		#Hash module
+		HASHER = lambda x : hash(tuple(set(x)))
+
 		antecedents = data[6] # 6 -> Buffer de dados
+		antecedents_h = HASHER(antecedents) #hashs antecedent data
 
 		#Getting model and consequents
 		french = self._PROCESS.get_french_model()
@@ -146,29 +141,24 @@ class Server():
 
 		#Converting frozen-set to list
 		for i in french_antecedents:
-			n_a.append(list(i))
+			n_a.append(HASHER(i))
 		for i in french_consequents:
 			n_c.append(list(i))
 
-		#Deleting antecedents from consequent list
-		n_c = self.n_cleaner(n_c, antecedents)
-
 		#Searching for results
-		index = 0
-		consequent = set() #Consequent list to return
-		for i in n_a:
-			if antecedents == i:
-				consequent.add(str(n_c[index]))
-			index+=1
+		r = list()
+		for i in range(len(n_a)):
+			if n_a[i] == antecedents_h:
+				r.append(n_c[i])
 
 		print("Antecedents: " + str(antecedents))
-		print("Consequents: " + str(consequent))
+		print("Consequents: " + str(r))
 
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
-		if len(consequent):
-			return consequent[0]
+		if len(r):
+			return r[0]
 		else:
 			return "reset"
 
