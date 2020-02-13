@@ -6,7 +6,7 @@ class Data():
 
 		###########################
 		##	WEB
-		self._IP_ = '172.17.193.241'
+		self._IP_ = '172.18.51.241'
 		self._PORT_ = 3000
 		self._BUFFER_LENGHT_ = 128
 		self._HOST_NAME_ = ""
@@ -19,7 +19,9 @@ class Data():
 		self._TOP_ = 10
 		self._WIDTH_ = 800
 		self._HEIGHT_ = 600
+
 		self.BUFFER_ELEMENTS = set()
+		self.index = 0
 
 		############################
 		##	Hardcoded data
@@ -395,6 +397,7 @@ class Data():
 							'T-LIGHT HOLDER HANGING LOVE BIRD', 'FOLDING UMBRELLA BLACKBLUE POLKADOT', 'ANTIQUE ALL GLASS CANDLESTICK', 'MAGNETS PACK OF 4 VINTAGE LABELS ', 'MIRRORED WALL ART POPPIES', 
 							'WRAP DOLLY GIRL', 'SMALL SILVER TRELLIS CANDLEPOT', 'KNITTED UNION FLAG HOT WATER BOTTLE', 'SET 6 FOOTBALL CELEBRATION CANDLES', 'WHITE WICKER STAR' ]
 	
+		#French main products
 		self._FRENCH_PRODUCTS_ = ['RED TOADSTOOL LED NIGHT LIGHT', 'LUNCH BAG SPACEBOY DESIGN', 'ROUND SNACK BOXES SET OF 4 FRUITS', 'ALARM CLOCK BAKELIKE GREEN', 
 									'ROUND SNACK BOXES SET OF4 WOODLAND', 'POSTAGE', 'PLASTERS IN TIN STRONGMAN', 'ALARM CLOCK BAKELIKE PINK', 'CHILDRENS CUTLERY SPACEBOY', 
 									'SET/6 RED SPOTTY PAPER CUPS', 'PLASTERS IN TIN SPACEBOY', 'CHILDRENS CUTLERY DOLLY GIRL', 'PLASTERS IN TIN CIRCUS PARADE', 
@@ -403,20 +406,63 @@ class Data():
 									'LUNCH BAG DOLLY GIRL DESIGN', 'ALARM CLOCK BAKELIKE RED', 'SET/20 RED RETROSPOT PAPER NAPKINS', 'LUNCH BOX WITH CUTLERY RETROSPOT',
 									'LUNCH BAG WOODLAND', 'RED RETROSPOT MINI CASES']
 
+		#Portugal main products
+		self._PORTUGEASE_PRODUCTS_ = []
+
+		#Sweden main products
+		self._SWEDEN_PRODUCS_ = []
+
+	# @deprecated
 	def get_randomized_product(self):
 		return self._PRODUCTS_[random.randint(0, len(self._PRODUCTS_))]
 
-	def get_french_product(self, pos):
-		
-		while pos <= len(self._FRENCH_PRODUCTS_):
-			if self._FRENCH_PRODUCTS_[pos] in self.BUFFER_ELEMENTS:
-				pos+=1
+	#buffer control
+	def add_to_buffer(self, b):
+		self.BUFFER_ELEMENTS.add(b)
+
+	###########################################
+	##	New method adds product selected to buffer
+	##	When apriori (at server) returns a element,
+	## 	it's added to buffer too.
+	##	If a reset command is sent by server,
+	##	buffer will not reset UNLESS it used all country's elements.
+	##	While buffer is up, get func will increment pos until a element
+	##	is not in buffer (already used in a cycle)
+	def get_french_product(self):
+	
+		while self.index <= len(self._FRENCH_PRODUCTS_):
+			if self._FRENCH_PRODUCTS_[self.index] in self.BUFFER_ELEMENTS:
+				self.index+=1
 			else:
-				self.BUFFER_ELEMENTS.add(self._FRENCH_PRODUCTS_[pos])
-				return [self._FRENCH_PRODUCTS_[pos], pos]
+				self.BUFFER_ELEMENTS.add(self._FRENCH_PRODUCTS_[self.index])
+				return self._FRENCH_PRODUCTS_[self.index]
 		
 		self.BUFFER_ELEMENTS = set()
-		return [self._FRENCH_PRODUCTS_[0], 0] 
+		return self._FRENCH_PRODUCTS_[0]
+
+	def get_portugease_product(self):
+
+		while self.index <= len(self._PORTUGEASE_PRODUCTS_):
+			if self._PORTUGEASE_PRODUCTS_[self.index] in self.BUFFER_ELEMENTS:
+				self.index+=1
+			else:
+				self.BUFFER_ELEMENTS.add(self._PORTUGEASE_PRODUCTS_[self.index])
+				return self._PORTUGEASE_PRODUCTS_[self.index]
+		
+		self.BUFFER_ELEMENTS = set()
+		return self._PORTUGEASE_PRODUCTS_[0]
+
+	def get_sweden_product(self):
+
+		while self.index <= len(self._SWEDEN_PRODUCS_):
+			if self._SWEDEN_PRODUCS_[self.index] in self.BUFFER_ELEMENTS:
+				self.index+=1
+			else:
+				self.BUFFER_ELEMENTS.add(self._SWEDEN_PRODUCS_[self.index])
+				return self._SWEDEN_PRODUCS_[self.index]
+		
+		self.BUFFER_ELEMENTS = set()
+		return self._SWEDEN_PRODUCS_[0]
 
 
 	##################################################
