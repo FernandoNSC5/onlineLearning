@@ -36,6 +36,15 @@ class App(QMainWindow):
 		self.customer_id = self._data_.get_customer_id()
 		self.COUNTRY = self._data_.get_countrys()[0]
 
+		##################################################
+		##	RANDOMIZED FUNC SWITCH
+		if self.COUNTRY == "France":
+			self.RANDOM_PRODUCT = self._data_.get_french_product
+		elif self.COUNTRY == "Portugal":
+			self.RANDOM_PRODUCT = self._data_.get_portugease_product
+		else:
+			self.RANDOM_PRODUCT = self._data_.get_sweden_product
+
 		#This local buffer retains information about all
 		#user data
 		self.local_buffer = list()
@@ -43,7 +52,7 @@ class App(QMainWindow):
 		self.user_flag = True
 
 		#Screen button info
-		self.local_buffer.append(self._data_.get_randomized_product())
+		self.local_buffer.append(self.RANDOM_PRODUCT())
 		#Destroying Windows Flags
 		self.setWindowFlags(
 						QtCore.Qt.Window |
@@ -167,10 +176,12 @@ class App(QMainWindow):
 		if resp == 'reset':
 			#If resp == reset, restart apriori function
 			self.local_buffer = list()
-			self.local_buffer.append(self._data_.get_randomized_product())
+			self.local_buffer.append(self.RANDOM_PRODUCT())
 		else:
 			#Storing response to local buffer
 			self.local_buffer.append(str(resp))
+			#Storing response to data buffer
+			self._data_.add_to_buffer(str(resp))
 
 		print("[-] Thread is down")
 		print("Button Manipulation")
