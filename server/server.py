@@ -158,13 +158,18 @@ class Server():
 		##	Parse list to string in order
 		## 	to byte-encode it
 		if len(r):
+			r = r[0]
 			return r[0]
 		else:
 			return "reset"
 
 	def apriori_portugal(self, data):	#PORTUGEASE METHOD
+
+		#Hash module
+		HASHER = lambda x : hash(tuple(set(x)))
 		
 		antecedents = data[6] # 6 -> Buffer de dados
+		antecedents_h - HASHER(antecedents)
 
 		#Getting model and consequents
 		portugal = self._PROCESS.get_portugease_model()
@@ -179,19 +184,17 @@ class Server():
 
 		#Converting frozen-set to list
 		for i in portugal_antecedents:
-			n_a.append(list(i))
+			n_a.append(HASHER(i))
 		for i in portugal_consequents:
 			n_c.append(list(i))
 
 		n_c = self.n_cleaner(n_c, antecedents)
 
 		#Searching for results
-		index = 0
-		consequent = set() #Consequent list to return
-		for i in n_a:
-			if antecedents == i:
-				consequent.add(str(n_c[index]))
-			index+=1
+		r = list()
+		for i in range(len(n_a)):
+			if n_a[i] == antecedents_h:
+				r.append(n_c[i])
 
 		print("Antecedents: " + str(antecedents))
 		print("Consequents: " + str(consequent))
@@ -199,14 +202,19 @@ class Server():
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
-		if len(consequent):
-			return consequent[0]
+		if len(r):
+			r = r[0]
+			return r[0]
 		else:
 			return "reset"
 
 	def apriori_sweden(self, data):	#SWEDEN METHOD
+
+		#Hash module
+		HASHER = lambda x : hash(tuple(set(x)))
 		
 		antecedents = data[6] # 6 -> Buffer de dados
+		antecedents_h = HASHER(antecedents)
 
 		#Getting model and consequents
 		sweden = self._PROCESS.get_sweden_model()
@@ -221,19 +229,17 @@ class Server():
 
 		#Converting frozen-set to list
 		for i in sweden_antecedents:
-			n_a.append(list(i))
+			n_a.append(HASHER(i))
 		for i in sweden_consequents:
 			n_c.append(list(i))
 
 		n_c = self.n_cleaner(n_c, antecedents)
 
 		#Searching for results
-		index = 0
-		consequent = set() #Consequent list to return
-		for i in n_a:
-			if antecedents == i:
-				consequent.add(str(n_c[index]))
-			index+=1
+		r = list()
+		for i in range(len(n_a)):
+			if n_a[i] == antecedents_h:
+				r.append(n_c[i])
 
 		print("Antecedents: " + str(antecedents))
 		print("Consequents: " + str(consequent))
@@ -241,8 +247,9 @@ class Server():
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
-		if len(consequent):
-			return consequent[0]
+		if len(r):
+			r = r[0]
+			return r[0]
 		else:
 			return "reset"
 
