@@ -5,3 +5,4 @@ xlrd
 openpyxl
 pyqt5
 mlxtend
+colorama
