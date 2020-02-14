@@ -174,6 +174,7 @@ class App(QMainWindow):
 		resp = self.send_data(ENCODED_STRING)
 
 		if resp == 'reset':
+			print("[THREAD]\tBuffer reset command recived")
 			#If resp == reset, restart apriori function
 			self.local_buffer = list()
 			self.local_buffer.append(self.RANDOM_PRODUCT())
@@ -183,8 +184,7 @@ class App(QMainWindow):
 			#Storing response to data buffer
 			self._data_.add_to_buffer(str(resp))
 
-		print("[-] Thread is down")
-		print("Button Manipulation")
+		print("[-]\tThread is down")
 		self.ProductBtn.setText(self.local_buffer[-1])
 		self.ProductBtn.setEnabled(True)
 		self.update()
