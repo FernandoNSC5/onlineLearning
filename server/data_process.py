@@ -7,28 +7,31 @@ from mlxtend.frequent_patterns import apriori, association_rules
 sys.path.append('utils/')
 import xls_utils as utils
 import threading
+import colorama
 
 class Data():
 
 	def __init__(self):
 		#####################################################
 		##	UTILS
+		colorama.init()
+		self._FORE = colorama.Fore
 		self._UTILS = utils.xls_utils()
 
 		######################################################
 		##	A.I PROCESS
-		print('[STARTING]\tLoading data')
+		print(self._FORE.CYAN + '[STARTING]' + self._FORE.RESET + '\tLoading data')
 		self.data = pd.read_excel('Online_retail.xlsx') 
 		self.data.head() 
 		self.data.columns 
 		self.data.Country.unique()
-		print('[LOADED]\tCleaning data') 
+		print(self._FORE.CYAN + '[LOADED]' + self._FORE.RESET + '\tCleaning data') 
 		self.clean_data()
-		print('[DATA CLEANED]\tRegion segmentation')
+		print(self._FORE.CYAN + '[DATA CLEANED]' + self._FORE.RESET + '\tRegion segmentation')
 		self.region_seg()
-		print('[SEGMENTED]\tEncoding')
+		print(self._FORE.CYAN + '[SEGMENTED]' + self._FORE.RESET + '\tEncoding')
 		self.encoding()
-		print('[ENCODED]\tCreating models')
+		print(self._FORE.CYAN + '[ENCODED]' + self._FORE.RESET + '\tCreating models')
 
 		#####################################################
 		##	MODELING
@@ -36,7 +39,7 @@ class Data():
 		self.portugease_models = self.create_portugease_models()
 		self.sweedish_models = self.create_sweedish_moels()
 
-		print('[MODELS READY]\n')
+		print(self._FORE.CYAN + '[MODELS READY]\n' + self._FORE.RESET)
 
 	def add_customer_data(self, invoice, stock_code, quantity, unit_price, customer_id, country, description):
 		self._UTILS.add_customer_data(invoice, stock_code, quantity, unit_price, customer_id, country, description)
@@ -45,12 +48,15 @@ class Data():
 		self._UTILS.print_buffer()
 
 	def update_data(self):
-		print("[THREADING]\tPreparing to write data")
+		print(self._FORE.MAGENTA + "[THREADING]" + self._FORE.RESET + "\tPreparing to write data")
 		thr = threading.Thread(target=self.update_data_slave, args=(), kwargs={})
 		thr.start()
 
 	def update_data_slave(self):
+		print()
+		print(self._FORE.RED + "===========================================")
 		print('[UPDATING DATA]\tWriting buffer to database')
+		print("===========================================" + self._FORE.RESET)
 		self._UTILS.write_xls()
 		print('[UPDATED]\tLoading new database')
 		self.data = pd.read_excel('Online_retail.xlsx') 
@@ -65,13 +71,15 @@ class Data():
 		self.encoding()
 		print('[REENCODED]\tCreating models')
 		self.gen_new_models()
+		print("[FINISHED]")
+		print(self._FORE.RED + "============================================" + self._FORE.RESET)
 
 	def gen_new_models(self):
 		self.french_models = self.create_french_models()
 		self.portugease_models = self.create_portugease_models()
 		self.sweedish_models = self.create_sweedish_moels()
 
-		print('[NEW MODELS READY]\n')
+		print(self._FORE.GREEN + '[NEW MODELS READY]\n' + self._FORE.RESET)
 
 	def clean_data(self):
 		self.data['Description'] = self.data['Description'].str.strip() #strip -> removes \n, \t, etc from strings
@@ -115,13 +123,13 @@ class Data():
 		frq_items = apriori(self.portugal_balance, min_support = 0.05, use_colnames = True)   
 		rules = association_rules(frq_items, metric ="lift", min_threshold = 1) 
 		rules = rules.sort_values(['confidence', 'lift'], ascending =[False, False]) 
-		return rules.head()
+		return rules
 
 	def create_sweedish_moels(self):
 		frq_items = apriori(self.sweden_balance, min_support = 0.05, use_colnames = True)   
 		rules = association_rules(frq_items, metric ="lift", min_threshold = 1) 
 		rules = rules.sort_values(['confidence', 'lift'], ascending =[False, False]) 
-		return rules.head()
+		return rules
 
 	def encode(self, x):
 		if x<=0:
