@@ -5,20 +5,24 @@ import random
 import socket
 import _thread
 import data_process
+import colorama
 
 class Server():
 
 	def __init__(self):
-		print("[STARTING] Initializing core variables")
+		colorama.init()
+		self._FORE = colorama.Fore
+
+		print(self._FORE.CYAN + "[STARTING]\t" + self._FORE.RESET + " Initializing core variables")
 		self._S = socket.socket()
 		self._HOST = ''
 		self._PORT = 3000
 		self._BL = 128
 		self._LISTEN_TIMES = 100
 
-		print("[INITIALIZED] Calling data module")
+		print(self._FORE.CYAN + "[INITIALIZED]\t" + self._FORE.RESET + " Calling data module")
 		self._PROCESS = data_process.Data()
-		print("[SERVER] Ready")
+		print(self._FORE.CYAN + "[SERVER]\t" + self._FORE.RESET + " Ready")
 		print()
 
 		self.core() #Initializing system
@@ -39,28 +43,27 @@ class Server():
 			#####################################
 			##	Processing data recived
 			if(rcData[5] == 'France'):
-				print("[SERVER] France selected")
+				print(self._FORE.MAGENTA + "[SERVER]\t" + self._FORE.RESET + " France selected")
 				response = self.apriori_french(rcData)
 				client_socket.send(response.encode())
 
 			elif(rcData[5] == 'Portugal'):
-				print("[SERVER] Portugal selected")
+				print(self._FORE.MAGENTA + "[SERVER]\t" + self._FORE.RESET + " Portugal selected")
 				response = self.apriori_portugal(rcData)
 				client_socket.send(response.encode())
 
 			elif(rcData[5] == 'Sweden'):
-				print("[SERVER] Sweden selected")
+				print(self._FORE.MAGENTA + "[SERVER]\t" + self._FORE.RESET + " Sweden selected")
 				response = self.apriori_sweden(rcData)
 				client_socket.send(response.encode())
 
 			else:
-				print("[SERVER] Nothing selected")
+				print(self._FORE.RED + "[SERVER] Nothing selected" + self._FORE.RESET)
 				response = ""
 				client_socket.send(response.encode())
 
 			#Writes buffer to xlsx every 5 requests
 			if counter_conn % 5 == 0:
-				print("[SERVER] On buffer:")
 				self._PROCESS.print_buffer_data()
 				self._PROCESS.update_data()
 			
@@ -68,16 +71,16 @@ class Server():
 
 	def core(self):
 
-		print("[STARTING] Starting network services")
+		print(self._FORE.CYAN + "[STARTING]\t" + self._FORE.RESET + " Starting network services")
 		self._S.bind((self._HOST, self._PORT))
 		self._S.listen(self._LISTEN_TIMES)
 		counter = 0
 
-		print("[STARTED] Waiting connections")
+		print(self._FORE.CYAN + "[STARTED]\t" + self._FORE.RESET + " Waiting connections")
 		while True:
 			c, addr = self._S.accept()
 			counter += 1
-			print("[+] Creating THREAD connection")
+			print(self._FORE.BLUE + "[+]\t\t" + self._FORE.RESET + " Creating THREAD connection")
 			_thread.start_new_thread(self.new_client, (c, addr, counter))
 		self._S.close()
 
@@ -151,9 +154,6 @@ class Server():
 			if n_a[i] == antecedents_h:
 				r.append(n_c[i])
 
-		print("Antecedents: " + str(antecedents))
-		print("Consequents: " + str(r))
-
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
@@ -196,9 +196,6 @@ class Server():
 			if n_a[i] == antecedents_h:
 				r.append(n_c[i])
 
-		print("Antecedents: " + str(antecedents))
-		print("Consequents: " + str(consequent))
-
 		############################################
 		##	Parse list to string in order
 		## 	to byte-encode it
@@ -240,9 +237,6 @@ class Server():
 		for i in range(len(n_a)):
 			if n_a[i] == antecedents_h:
 				r.append(n_c[i])
-
-		print("Antecedents: " + str(antecedents))
-		print("Consequents: " + str(consequent))
 
 		############################################
 		##	Parse list to string in order
