@@ -26,6 +26,14 @@ class App(QMainWindow):
 		self.TOP = self._data_.get_top()
 		self.WIDTH = self._data_.get_width()
 		self.HEIGHT = self._data_.get_height()
+		
+
+		#################################################
+		##	TIMER
+		self.flag_change = False
+		self.SECONDS = 15
+		self.ELAPSED = 0
+
 
 		#################################################
 		##	STATIC SERVER UTILS VAR
@@ -168,27 +176,48 @@ class App(QMainWindow):
 		print("[THREAD]\tEncoding data")
 		ENCODED_STRING += self.encode_data([invoice, stock_code, quantity, unity_price, customer_id, country], 0)
 		ENCODED_STRING += self.encode_data(self.local_buffer, 1)
+		self.flag_change = False
 
 		#NETWORK
 		print("[THREAD]\tSending data")
 		resp = self.send_data(ENCODED_STRING)
+		_thread.start_new_thread(self.counter_thread, (self.SECONDS))
 
 		if resp == 'reset':
 			print("[THREAD]\tBuffer reset command recived")
+			self.flag_change = True
 			#If resp == reset, restart apriori function
 			self.local_buffer = list()
 			self.local_buffer.append(self.RANDOM_PRODUCT())
 		else:
-			#Storing response to local buffer
-			self.local_buffer.append(str(resp))
-			#Storing response to data buffer
-			self._data_.add_to_buffer(str(resp))
+			self.local_buffer.append(str(resp))		#Storing response to local buffer
+			self._data_.add_to_buffer(str(resp))	#Storing response to data buffer
 
 		print("[-]\tThread is down")
 		self.ProductBtn.setText(self.local_buffer[-1])
 		self.ProductBtn.setEnabled(True)
 		self.update()
 		self.soc.close()
+
+	def counter_thread(self, seconds):
+		self.ELAPSED = 0
+		while self.ELAPSED < seconds:
+			time.sleep(1)
+
+			if self.flag_change:
+				self.ELAPSED = 0
+				return
+
+			print("Elapsed time: " + str(self.ELAPSED))
+			self.ELAPSED += 1
+
+		#If @seconds passed:
+		self.ELAPSED = 0	#Reset elapsed time
+		if self.flag_change:
+			return 			#Do nothing
+		else:
+			self.flag_change = True
+			self.RANDOM_PRODUCT()	#Next product index for Frnach, Sweden or Portugal
 
 
 	######################################################
