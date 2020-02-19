@@ -2,6 +2,7 @@ import sys
 import numpy as numpy
 import _thread
 import socket
+import time
 
 #pyqt
 from PyQt5 import QtCore, QtWidgets, QtGui
@@ -181,7 +182,7 @@ class App(QMainWindow):
 		#NETWORK
 		print("[THREAD]\tSending data")
 		resp = self.send_data(ENCODED_STRING)
-		_thread.start_new_thread(self.counter_thread, (self.SECONDS))
+		_thread.start_new_thread(self.counter_thread, (self.SECONDS,))
 
 		if resp == 'reset':
 			print("[THREAD]\tBuffer reset command recived")
@@ -208,7 +209,7 @@ class App(QMainWindow):
 				self.ELAPSED = 0
 				return
 
-			print("Elapsed time: " + str(self.ELAPSED))
+			print("Elapsed time: " + str(self.ELAPSED + 1))
 			self.ELAPSED += 1
 
 		#If @seconds passed:
@@ -217,7 +218,7 @@ class App(QMainWindow):
 			return 			#Do nothing
 		else:
 			self.flag_change = True
-			self.RANDOM_PRODUCT()	#Next product index for Frnach, Sweden or Portugal
+			self.RANDOM_PRODUCT()	#Next product index for France, Sweden or Portugal
 
 
 	######################################################
