@@ -1,6 +1,5 @@
-# Online Learning
-### Smart Digital Advertisiment
-
+# Online Learning 
+----------------------------------------------------------------------------
 ![Programming Language](https://img.shields.io/github/languages/top/FernandoNSC5/onlineLearning.svg?color=lightgrey&logo=python&logoColor=green) 
 [![License](https://img.shields.io/cran/l/devtools?color=lightgrey&logoColor=black)](LICENSE)
 ![Version](https://img.shields.io/badge/Version-1.1-lightgrey.svg?style=popout)
