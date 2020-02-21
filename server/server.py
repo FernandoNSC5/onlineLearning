@@ -129,6 +129,11 @@ class Server():
 		HASHER = lambda x : hash(tuple(set(x)))
 
 		antecedents = data[6] # 6 -> Buffer de dados
+
+		#Cleanning buffer
+		for i in range(len(antecedents)):
+			antecedents[i] = antecedents[i].strip()
+
 		antecedents_h = HASHER(antecedents) #hashs antecedent data
 
 		#Getting model and consequents
@@ -169,6 +174,11 @@ class Server():
 		HASHER = lambda x : hash(tuple(set(x)))
 		
 		antecedents = data[6] # 6 -> Buffer de dados
+
+		#Cleanning buffer
+		for i in range(len(antecedents)):
+			antecedents[i] = antecedents[i].strip()
+
 		antecedents_h - HASHER(antecedents)
 
 		#Getting model and consequents
@@ -211,6 +221,11 @@ class Server():
 		HASHER = lambda x : hash(tuple(set(x)))
 		
 		antecedents = data[6] # 6 -> Buffer de dados
+		
+		#Cleanning buffer
+		for i in range(len(antecedents)):
+			antecedents[i] = antecedents[i].strip()
+
 		antecedents_h = HASHER(antecedents)
 
 		#Getting model and consequents
