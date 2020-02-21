@@ -218,7 +218,8 @@ class App(QMainWindow):
 			return 			#Do nothing
 		else:
 			self.flag_change = True
-			self.RANDOM_PRODUCT()	#Next product index for France, Sweden or Portugal
+			self.ProductBtn.setText(self.RANDOM_PRODUCT())	#Next product index for France, Sweden or Portugal
+			self.update()
 
 
 	######################################################
