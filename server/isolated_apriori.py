@@ -3,7 +3,7 @@ import data_process
 HASHER = lambda x : hash(tuple(set(x)))
 
 #Lista de antecedentes para o apriori rodar
-antecedents = ['SET/6 RED SPOTTY PAPER PLATES', 'SET/6 RED SPOTTY PAPER CUPS']
+antecedents = ['POSTAGE']
 antecedents_h = HASHER(antecedents)
 
 #Getting models
